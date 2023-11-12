@@ -1,0 +1,25 @@
+# Arquivos compilados
+*.class
+
+# Arquivos de build
+bin/
+target/
+
+# Arquivos de configuração do IDE
+.idea/
+.vscode/
+
+# Dependências do Maven
+/.m2/
+
+# Arquivos de log
+*.log
+
+# Arquivos temporários
+*.tmp
+
+# Arquivos de backup
+*~
+
+# Arquivos de saída
+*.out
