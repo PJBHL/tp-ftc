@@ -1,5 +1,4 @@
 package Componentes;
-import java.io.IOException;
 import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.File;
@@ -7,18 +6,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class Gramatica {
-  private Map<String, List<String>> leituraGramatica;
-
   /**
    * Este método trata o path.
    * 
    * @param path Caminho do arquivo de texto.
    * @return Path tratado com o caminho total do arquivo.
    */
-
   private String tratarPath(String path) {
 
     File arq = new File(path);
@@ -44,7 +40,6 @@ public class Gramatica {
     } else {
       return "Path nao encontrado";
     }
-
   }
 
   /**
@@ -58,55 +53,18 @@ public class Gramatica {
 
     Map<String, List<String>> gramaticaLida = this.readGrammar(pathTratado);
 
-    System.out.println(gramaticaLida);
-
+    // System.out.println(gramaticaLida);
   }
 
-  // public List<List<String>> readGrammar(String path) throws Exception {
-  //   List<List<String>> gramatica = new ArrayList<>();
-  //   BufferedReader br = new BufferedReader(new FileReader(path));
-
-  //   String line;
-
-  //   while((line = br.readLine()) != null) {
-  //     line = line.trim();
-
-  //     if(!line.isEmpty()) {
-  //       String[] delimitador = line.split("->");
-  //       String naoTerminal = delimitador[0].trim();
-  //       String[] regras = delimitador[1].trim().split("\\|");
-
-  //       List<String> regrasList = new ArrayList<>();
-  //       regrasList.add(naoTerminal);
-  //       for(String regra : regras)
-  //         regrasList.add(regra.trim());
-
-  //       gramatica.add(regrasList);
-  //     }
-  //   }
-
-  //   printGramatica(gramatica);
-  //   br.close();
-  //   return gramatica;
-  // }
-
-  // public void printGramatica(List<List<String>> gramatica) {
-  //   for (int i = 0; i < gramatica.size(); i++) {
-  //       System.out.print("[" + i + "] " + gramatica.get(i).get(0) + ": ");
-  //       for (int j = 1; j < gramatica.get(i).size(); j++) {
-  //           System.out.print(gramatica.get(i).get(j));
-  //           if (j < gramatica.get(i).size() - 1) {
-  //               System.out.print(", ");
-  //           }
-  //       }
-  //       System.out.println();
-  //   }
-  // }
-
-
+/**
+ * Metodo para leitura de gramatica de um arquivo txt.
+ * @param path - caminho do arquivo de leitura.
+ * @return - retorna um dicionario com a gramatica lida.
+ * @throws Exception - arquivo não encontrado.
+ */
   public Map<String, List<String>> readGrammar(String path) throws Exception {
     BufferedReader br = new BufferedReader(new FileReader(path));
-    Map<String, List<String>> gramatica = new HashMap<>();
+    Map<String, List<String>> gramatica = new LinkedHashMap<>();
     
     String line;
 
@@ -120,13 +78,23 @@ public class Gramatica {
         regrasList.add(regra.trim());
 
       gramatica.put(naoTerminal, regrasList);
-      
-
     }
-
-    System.out.println(gramatica);
 
     br.close();
     return gramatica;
   }
+
+  // public void asd(Map<String, List<String>> mapinho) {
+
+  //       mapinho.forEach((key, value)->{
+          
+  //         System.out.println(key + "=" +  value);
+  //       });
+    
+  // }
 }
+
+
+
+
+
