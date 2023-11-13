@@ -1,9 +1,9 @@
-S -> NP VP
-VP -> VP PP
-VP -> V NP
+S -> NP | VP
+VP -> VP | PP
+VP -> V | NP
 VP -> come
-PP -> P NP
-NP -> Det N
+PP -> P | NP
+NP -> Det | N
 NP -> ela
 V -> come
 P -> com
