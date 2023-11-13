@@ -1,0 +1,12 @@
+S -> NP VP
+VP -> VP PP
+VP -> V NP
+VP -> come
+PP -> P NP
+NP -> Det N
+NP -> ela
+V -> come
+P -> com
+N -> peixe
+N -> garfo
+Det -> um
