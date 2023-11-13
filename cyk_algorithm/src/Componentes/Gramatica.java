@@ -8,9 +8,9 @@ import java.util.ArrayList;
 
 // [0] -> [0][1][2][3]
 
-public class Utils {
+public class Gramatica {
 
-  public Utils() {
+  public Gramatica() {
 
   }
 

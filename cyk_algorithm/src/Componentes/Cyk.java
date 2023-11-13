@@ -36,6 +36,8 @@ package Componentes;
 
 // package Componentes;
 
-// public class Cyk {
-
-// }
+public class Cyk {
+    public static void hello() {
+        System.out.println("oi porra");
+    }
+}

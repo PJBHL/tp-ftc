@@ -4,7 +4,7 @@ import Componentes.*;
 public class App {
   public static void main(String[] args) throws Exception {
 
-    Utils ut = new Utils();
+    Gramatica ut = new Gramatica();
     List<String> linhasG = new ArrayList<>();
     // linhasG = ut.readGrammar(args[0]);
 
