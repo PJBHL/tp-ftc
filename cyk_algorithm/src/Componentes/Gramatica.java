@@ -2,38 +2,65 @@ package Componentes;
 import java.io.IOException;
 import java.io.FileReader;
 import java.io.BufferedReader;
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class Gramatica {
   private Map<String, List<String>> leituraGramatica;
 
-  public Gramatica(String path) throws Exception {
-    // File arq = new File(path);
-    // String caminhoTotal = arq.getAbsolutePath();  
+  /**
+   * Este método trata o path.
+   * 
+   * @param path Caminho do arquivo de texto.
+   * @return Path tratado com o caminho total do arquivo.
+   */
 
-    // // String[] splitado = caminhoTotal.split("/");
-    // // List<String> listona = new ArrayList<>(Arrays.asList(splitado));
-    
+  private String tratarPath(String path) {
 
-    // // LOBATO: C:\Users\joaopc\Documents\tp-ftc\cyk_algorithm\src\Gramatica\g1.txt
+    File arq = new File(path);
+    String caminhoTotal = arq.getAbsolutePath();
+    String array[] = caminhoTotal.split("\\\\");
+    List<String> list = new ArrayList<>(Arrays.asList(array));
+    var arqName = list.get(list.size() - 1);
+    var folder1 = list.get(list.size() - 2);
+    list.remove(list.size() - 1);
+    list.remove(list.size() - 1);
+    list.add("src");
+    list.add(folder1);
+    list.add(arqName);
 
-    leituraGramatica = readGrammar(path);
-    // System.out.println("LOBATO: " + caminhoTotal);
+    String pathFinal = "";
 
-    
+    for (String each : list) {
+      pathFinal += each + "/";
+    }
+
+    if (pathFinal != "") {
+      return pathFinal;
+    } else {
+      return "Path nao encontrado";
+    }
 
   }
 
+  /**
+   * Este método CONSTRUTOR.
+   * 
+   * @param path Caminho do arquivo de texto.
+   */
+  public Gramatica(String path) throws Exception {
 
-  // Exemplo de leitura gramatica
-  // [0] -> [0][1][2][3]
-  // [1] -> [0][1][2][3]
+    String pathTratado = this.tratarPath(path);
 
+    Map<String, List<String>> gramaticaLida = this.readGrammar(pathTratado);
 
+    System.out.println(gramaticaLida);
 
+  }
 
   // public List<List<String>> readGrammar(String path) throws Exception {
   //   List<List<String>> gramatica = new ArrayList<>();
@@ -103,4 +130,3 @@ public class Gramatica {
     return gramatica;
   }
 }
-
