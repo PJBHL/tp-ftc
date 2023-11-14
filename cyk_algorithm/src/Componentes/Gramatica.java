@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 
 public class Gramatica {
+  public Map<String, List<String>> gramaticaLida;
   /**
    * Este método trata o path.
    * 
@@ -51,9 +52,16 @@ public class Gramatica {
 
     String pathTratado = this.tratarPath(path);
 
-    Map<String, List<String>> gramaticaLida = this.readGrammar(pathTratado);
+    gramaticaLida = this.readGrammar(pathTratado);
 
-    // System.out.println(gramaticaLida);
+    // new Cyk(gramaticaLida);
+
+
+    System.out.println(gramaticaLida);
+  }
+
+  public Map<String, List<String>> getGramaticaLida() {
+      return gramaticaLida;
   }
 
 /**

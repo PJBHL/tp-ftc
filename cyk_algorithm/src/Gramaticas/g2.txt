@@ -1,3 +1,6 @@
-S -> NP | VP
-NP -> batata
-VP -> vini
+S -> SE | a | AX | AB
+L -> AX | AB
+E -> a | AX | AB
+A -> (
+B -> )
+X -> SB

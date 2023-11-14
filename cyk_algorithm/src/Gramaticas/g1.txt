@@ -1,12 +1,5 @@
-S -> NP | VP
-VP -> VP | PP
-VP -> V | NP
-VP -> come
-PP -> P | NP
-NP -> Det | N
-NP -> ela
-V -> come
-P -> com
-N -> peixe
-N -> garfo
-Det -> um
+S -> b | AA1 | UB | a | SA | AS
+A -> b | AA1 | UB | a | SA | AS
+A1 -> SA
+U -> a
+B -> b
