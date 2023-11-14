@@ -1,4 +1,5 @@
 package Componentes;
+
 import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.File;
@@ -9,6 +10,8 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 
 public class Gramatica {
+  public Map<String, List<String>> gramaticaLida;
+
   /**
    * Este método trata o path.
    * 
@@ -51,30 +54,35 @@ public class Gramatica {
 
     String pathTratado = this.tratarPath(path);
 
-    Map<String, List<String>> gramaticaLida = this.readGrammar(pathTratado);
+    gramaticaLida = this.readGrammar(pathTratado);
 
-    // System.out.println(gramaticaLida);
+    System.out.println(gramaticaLida);
   }
 
-/**
- * Metodo para leitura de gramatica de um arquivo txt.
- * @param path - caminho do arquivo de leitura.
- * @return - retorna um dicionario com a gramatica lida.
- * @throws Exception - arquivo não encontrado.
- */
+  public Map<String, List<String>> getGramaticaLida() {
+    return gramaticaLida;
+  }
+
+  /**
+   * Metodo para leitura de gramatica de um arquivo txt.
+   * 
+   * @param path - caminho do arquivo de leitura.
+   * @return - retorna um dicionario com a gramatica lida.
+   * @throws Exception - arquivo não encontrado.
+   */
   public Map<String, List<String>> readGrammar(String path) throws Exception {
     BufferedReader br = new BufferedReader(new FileReader(path));
     Map<String, List<String>> gramatica = new LinkedHashMap<>();
-    
+
     String line;
 
-    while((line = br.readLine()) != null) {
+    while ((line = br.readLine()) != null) {
       String[] delimitador = line.split(" -> ");
       String naoTerminal = delimitador[0].trim();
       String[] regras = delimitador[1].trim().split("\\|");
 
       List<String> regrasList = new ArrayList<>();
-      for(String regra : regras)
+      for (String regra : regras)
         regrasList.add(regra.trim());
 
       gramatica.put(naoTerminal, regrasList);
@@ -86,15 +94,10 @@ public class Gramatica {
 
   // public void asd(Map<String, List<String>> mapinho) {
 
-  //       mapinho.forEach((key, value)->{
-          
-  //         System.out.println(key + "=" +  value);
-  //       });
-    
+  // mapinho.forEach((key, value)->{
+
+  // System.out.println(key + "=" + value);
+  // });
+
   // }
 }
-
-
-
-
-
