@@ -2,6 +2,7 @@ package Componentes;
 
 import java.io.*;
 import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * G:
@@ -49,7 +50,7 @@ public class Cyk {
     Iterator<String> iterator = listadevalores.iterator();
     while (iterator.hasNext()) {
       String palavra = iterator.next();
-      if (palavra.equals(palavra.toUpperCase())) {
+      if (Pattern.matches("^[A-Z0-9]*$", palavra)) {
         iterator.remove();
       }
     }
@@ -72,58 +73,33 @@ public class Cyk {
   // 3 caso
   // vini batata
   public boolean isInAlphabet(Map<String, List<String>> gramatica, String word) {
-    // Splitando a palavra por espaco
-    String[] splitFrase = word.split(" ");
-    // Testando se a variavel word é uma frase ou uma palavra
-    if (splitFrase.length == 1) {
-      // Criando uma Lista de Caracteres
-      List<Character> listaDeCaracteres = new ArrayList<>();
-      // Adicionar cada caractere à lista
-      for (char caractere : word.toCharArray()) {
-        listaDeCaracteres.add(caractere);
-      }
-      // Converter List<Character> para List<String>
-      List<String> listaDeStrings = new ArrayList<>();
-      for (Character character : listaDeCaracteres) {
+
+    // Criando lista de string char
+    List<String> listaDeStrings = new ArrayList<>();
+    for (Character character : word.toCharArray()) {
+
+      if (character != ' ') {
         listaDeStrings.add(character.toString());
       }
-      // Caso for somente uma palavra
-      for (Map.Entry<String, List<String>> each : gramatica.entrySet()) {
-        List<String> value = each.getValue();
-        value = this.removerNaoterminal(value);
-        // Se a lista for somente de terminal vai dar 0, entao ignorar este caso
-        if (value.size() != 0) {
-          value.forEach(ite -> {
-            listaDeStrings.removeIf(elemento -> ite.equals(elemento));
-          });
-          "".toString();
-        }
+    }
+
+    // Caso for somente uma palavra
+    for (Map.Entry<String, List<String>> each : gramatica.entrySet()) {
+      List<String> value = each.getValue();
+      value = this.removerNaoterminal(value);
+      // Se a lista for somente de terminal vai dar 0, entao ignorar este caso
+      if (value.size() != 0) {
+        value.forEach(ite -> {
+          listaDeStrings.removeIf(elemento -> ite.equals(elemento));
+        });
       }
-      // Return final
+
       if (listaDeStrings.size() == 0) {
         return true;
-      } else {
-        return false;
-      }
-    } else {
-      // Caso for uma frase
-      // Transformando splitFrase em arrayList
-      List<String> listaDeFrase = Arrays.asList(splitFrase);
-      // Realizando for each pelo value no nosso dict gramatica para palavra frase
-      for (Map.Entry<String, List<String>> each : gramatica.entrySet()) {
-        List<String> value = each.getValue();
-        value = this.removerNaoterminal(value);
-        // Se a lista for somente de terminal vai dar 0, entao ignorar este caso
-        if (value.size() != 0) {
-          // Verifica se as duas lista tem alguma correspondencia
-          long igual = value.stream().filter(listaDeFrase::contains).count();
-          if (igual == 0) {
-            return false;
-          }
-        }
       }
     }
-    return true;
+
+    return false;
   }
 
   /**
