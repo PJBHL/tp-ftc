@@ -1,6 +1,5 @@
 package Componentes;
 
-import java.io.*;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -117,6 +116,7 @@ public class Cyk {
    * sintaticas.
    * Em resumo T, nos diz se w é uma sentença de G ou não.
    */
+  @SuppressWarnings("unchecked")
   public boolean cykAlgorithm(Map<String, List<String>> gramatica, String word) {
     int n = word.length();
 
