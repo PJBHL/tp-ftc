@@ -81,11 +81,22 @@ public class Gramatica {
       String naoTerminal = delimitador[0].trim();
       String[] regras = delimitador[1].trim().split("\\|");
 
-      List<String> regrasList = new ArrayList<>();
-      for (String regra : regras)
-        regrasList.add(regra.trim());
+      // verificar se ja existe o index
+      if (gramatica.containsKey(naoTerminal)) {
+        List<String> regrasList = gramatica.get(naoTerminal);
+        for (String regra : regras)
+          regrasList.add(regra.trim());
+        gramatica.put(naoTerminal, regrasList);
+        // testar sem o index
+      } else {
+        List<String> regrasList = new ArrayList<>();
+        for (String regra : regras)
+          regrasList.add(regra.trim());
 
-      gramatica.put(naoTerminal, regrasList);
+        gramatica.put(naoTerminal, regrasList);
+
+      }
+
     }
 
     br.close();

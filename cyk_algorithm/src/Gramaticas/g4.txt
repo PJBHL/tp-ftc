@@ -1,0 +1,7 @@
+S -> b | a | SA | AS
+S -> AA1 | UB
+A -> b | AA1 | UB | a | SA | AS
+A1 -> SA
+U -> a
+B -> b
+B -> c
