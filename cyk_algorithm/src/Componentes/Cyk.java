@@ -130,13 +130,12 @@ public class Cyk {
 
     // Tabela sendo preenchida com não-terminais que geram terminais.
     for (int i = 0; i < n; i++) {
-      String terminal = word.substring(i, i + 1);
-      // gramatica.forEach((key, value)->{
+      char terminal = word.charAt(i);
       for (Map.Entry<String, List<String>> j : gramatica.entrySet()) {
         String naoTerminal = j.getKey();
         List<String> regras = j.getValue();
         for (String regra : regras) {
-          if (regra.contains(terminal))
+          if (regra.length() == 1 && regra.charAt(0) == terminal)
             tabela[i][i].add(naoTerminal);
         }
       }
@@ -152,10 +151,10 @@ public class Cyk {
             List<String> regras = entry.getValue();
             for (String regra : regras) {
               if (regra.length() == 2) {
-                String simbolo1 = regra.substring(0, 1);
-                String simbolo2 = regra.substring(1);
-                if (tabela[i][z].contains(simbolo1) &&
-                    tabela[z + 1][k].contains(simbolo2)) {
+                char simbolo1 = regra.charAt(0);
+                char simbolo2 = regra.charAt(1);
+                if (tabela[i][z].contains(String.valueOf(simbolo1)) &&
+                    tabela[z + 1][k].contains(String.valueOf(simbolo2))) {
                   tabela[i][k].add(naoTerminal);
                 }
               }

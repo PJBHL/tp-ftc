@@ -1,7 +1,8 @@
-S -> b | a | SA | AS
-S -> AA1 | UB
-A -> b | AA1 | UB | a | SA | AS
-A1 -> SA
-U -> a
-B -> b
-B -> c
+S -> LT | QZ
+L -> b
+T -> QZ
+Q -> a
+Z -> LN | QU
+N -> QU
+U -> LE | QL | a
+E -> QL | a
