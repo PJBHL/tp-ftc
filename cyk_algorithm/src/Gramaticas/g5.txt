@@ -1,2 +1,3 @@
-A -> BAB | B | !
-B -> oo | !
+S -> ASA | aB
+A -> B | S
+B -> b | !

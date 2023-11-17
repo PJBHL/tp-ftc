@@ -86,37 +86,24 @@ public class RemoverTransicoesVazias {
 
       for (String elementoLista : regras) {
         for (String eachTV : transicoesVazias) {
-          System.out.println(elementoLista);
           if (elementoLista.contains(eachTV)) {
             System.out.println(contemLetrasMaiusculasIguais(elementoLista));
 
             if (contemLetrasMaiusculasIguais(elementoLista)) {
               "".toString();
 
-              List<String> possibilidades = new ArrayList<>();
-              // BaBaB
-
-              // for (int i = 0; i < elementoLista.length(); i++) {
-              // StringBuilder sb = new StringBuilder(elementoLista);
-              // if (sb.charAt(i) == eachTV.charAt(0)) {
-
-              // sb.deleteCharAt(i);
-
-              // if (!possibilidades.contains(sb.toString()) && sb.toString() != ""
-              // && !regrasCopy.contains(sb.toString())) {
-              // possibilidades.add(sb.toString());
-              // regrasCopy.add(sb.toString());
-
-              // }
-
-              // }
-              // }
+              System.out.println("Elemento lista: " + elementoLista + " EACHTV: " + eachTV + "\n\n\n");
+              List<String> possibilidades = teste.iniciandoDerivacaoPalavra(elementoLista, eachTV.charAt(0));
+              System.out.println("POSSIBILIDADES: " + possibilidades);
 
               "".toString();
 
               String resultado = elementoLista.replace(eachTV, "");
 
               if (resultado != "" && !regrasCopy.contains(resultado)) {
+                for (String string : possibilidades) {
+                  regrasCopy.add(string);
+                }
                 regrasCopy.add(resultado);
               }
             } else {

@@ -70,7 +70,7 @@ public class teste {
     return resp; // Não foram encontradas duas ou mais letras maiúsculas consecutivas iguais
   }
 
-  private static List<String> iniciandoDerivacaoPalavra(String input, char target) {
+  public static List<String> iniciandoDerivacaoPalavra(String input, char target) {
 
     List<Integer> opa = obterPosicoesLetras(input, target);
 
@@ -146,16 +146,16 @@ public class teste {
 
   }
 
-  public static void main(String[] args) {
-    String input = "AaAaAaA";
-    char target = 'A';
+  // public static void main(String[] args) {
+  //   String input = "AaAaAaA";
+  //   char target = 'A';
 
-    List<String> resp = new ArrayList<>();
+  //   List<String> resp = new ArrayList<>();
 
-    resp = iniciandoDerivacaoPalavra(input, target);
+  //   resp = iniciandoDerivacaoPalavra(input, target);
 
-    "".toString();
+  //   "".toString();
 
-  }
+  // }
 
 }
