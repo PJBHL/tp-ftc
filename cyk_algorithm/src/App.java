@@ -1,5 +1,5 @@
 import Componentes.*;
-import Componentes.CNF.Chomsky;
+import Componentes.CNF.*;
 
 public class App {
   public static void main(String[] args) throws Exception {
@@ -18,6 +18,5 @@ public class App {
     // System.out.println("A sentença nao pertence ao alfabeto");
     Gramatica ut = new Gramatica(args[0]);
     Chomsky chomchom = new Chomsky(ut);
-    chomchom.eliminarProducoesVazias();
   }
 }

@@ -104,30 +104,42 @@ public class Gramatica {
     br.close();
     return gramatica;
   }
-  
+
   public static void imprimirGramatica(Map<String, List<String>> gramatica) {
-        Set<String> naoTerminaisImprimidos = new HashSet<>();
+    Set<String> naoTerminaisImprimidos = new HashSet<>();
 
-        for (Map.Entry<String, List<String>> entry : gramatica.entrySet()) {
-            String variavel = entry.getKey();
-            List<String> regras = entry.getValue();
+    for (Map.Entry<String, List<String>> entry : gramatica.entrySet()) {
+      String variavel = entry.getKey();
+      List<String> regras = entry.getValue();
 
-            if (!naoTerminaisImprimidos.contains(variavel)) {
-                System.out.print(variavel + " -> ");
-                imprimirConjuntoDeRegras(regras);
-                naoTerminaisImprimidos.add(variavel);
-            }
-        }
+      if (!naoTerminaisImprimidos.contains(variavel)) {
+        System.out.print(variavel + " -> ");
+        imprimirConjuntoDeRegras(regras);
+        naoTerminaisImprimidos.add(variavel);
+      }
+    }
+  }
+
+  private static void imprimirConjuntoDeRegras(List<String> regras) {
+    System.out.print("{");
+    for (int i = 0; i < regras.size(); i++) {
+      System.out.print(regras.get(i));
+      if (i < regras.size() - 1) {
+        System.out.print(" | ");
+      }
+    }
+    System.out.println("}");
+  }
+
+  public static Map<String, List<String>> clonarGramatica(Map<String, List<String>> target) {
+    Map<String, List<String>> clone = new LinkedHashMap<>();
+
+    for (Map.Entry<String, List<String>> entry : target.entrySet()) {
+      List<String> originalLista = entry.getValue();
+      List<String> copiaLista = new ArrayList<>(originalLista);
+      clone.put(entry.getKey(), copiaLista);
     }
 
-    private static void imprimirConjuntoDeRegras(List<String> regras) {
-        System.out.print("{");
-        for (int i = 0; i < regras.size(); i++) {
-            System.out.print(regras.get(i));
-            if (i < regras.size() - 1) {
-                System.out.print(" | ");
-            }
-        }
-        System.out.println("}");
-    }
+    return clone;
+  }
 }

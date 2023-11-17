@@ -6,17 +6,13 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Chomsky {
+public class RemoverTransicoesVazias {
 
-  Map<String, List<String>> glc;
+  static Map<String, List<String>> glc;
 
-  public Chomsky(Gramatica ut) {
-    this.glc = ut.getGramaticaLida();
+  public RemoverTransicoesVazias(Gramatica gramatica) {
+    glc = gramatica.getGramaticaLida();
   }
-
-  // private int qtdLetraMaiusculaCalc(String palavra){
-
-  // }
 
   /**
    * 
@@ -24,7 +20,7 @@ public class Chomsky {
    * @param glcCopy
    * @return
    */
-  private List<String> pegarTransicoesVazias(List<String> transicoesVazias, Map<String, List<String>> copyGlc) {
+  private static List<String> pegarTransicoesVazias(List<String> transicoesVazias, Map<String, List<String>> copyGlc) {
 
     for (Map.Entry<String, List<String>> each : copyGlc.entrySet()) {
 
@@ -75,7 +71,7 @@ public class Chomsky {
    * @param glc
    * @return
    */
-  private Map<String, List<String>> removendoLambdadaGramatica(List<String> transicoesVazias,
+  private static Map<String, List<String>> removendoLambdadaGramatica(List<String> transicoesVazias,
       Map<String, List<String>> glc) {
 
     Map<String, List<String>> glcCopy = new LinkedHashMap<>(glc);
@@ -100,21 +96,21 @@ public class Chomsky {
               List<String> possibilidades = new ArrayList<>();
               // BaBaB
 
-              for (int i = 0; i < elementoLista.length(); i++) {
-                StringBuilder sb = new StringBuilder(elementoLista);
-                if (sb.charAt(i) == eachTV.charAt(0)) {
+              // for (int i = 0; i < elementoLista.length(); i++) {
+              // StringBuilder sb = new StringBuilder(elementoLista);
+              // if (sb.charAt(i) == eachTV.charAt(0)) {
 
-                  sb.deleteCharAt(i);
+              // sb.deleteCharAt(i);
 
-                  if (!possibilidades.contains(sb.toString()) && sb.toString() != ""
-                      && !regrasCopy.contains(sb.toString())) {
-                    possibilidades.add(sb.toString());
-                    regrasCopy.add(sb.toString());
+              // if (!possibilidades.contains(sb.toString()) && sb.toString() != ""
+              // && !regrasCopy.contains(sb.toString())) {
+              // possibilidades.add(sb.toString());
+              // regrasCopy.add(sb.toString());
 
-                  }
+              // }
 
-                }
-              }
+              // }
+              // }
 
               "".toString();
 
@@ -146,20 +142,15 @@ public class Chomsky {
 
   }
 
-  public void eliminarProducoesVazias() {
+  public static Map<String, List<String>> eliminarProducoesVazias(Map<String, List<String>> copiaMap) {
     List<String> transicoesVazias = new ArrayList<>();
     transicoesVazias.add("!");
 
-    Map<String, List<String>> copiaMap = new HashMap<>();
-    for (Map.Entry<String, List<String>> entry : this.glc.entrySet()) {
-      List<String> originalLista = entry.getValue();
-      List<String> copiaLista = new ArrayList<>(originalLista);
-      copiaMap.put(entry.getKey(), copiaLista);
-    }
-
     transicoesVazias = pegarTransicoesVazias(transicoesVazias, copiaMap);
-    copiaMap = removendoLambdadaGramatica(transicoesVazias, this.glc);
+    copiaMap = removendoLambdadaGramatica(transicoesVazias, copiaMap);
     "".toString();
+
+    return copiaMap;
 
   }
 }
