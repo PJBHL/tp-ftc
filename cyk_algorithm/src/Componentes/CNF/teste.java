@@ -97,7 +97,7 @@ public class teste {
             copyInputDerivacao = removerLetra(copyInputDerivacao, index);
 
             if (!possibilidades.contains(copyInputDerivacao) &&
-                !contemDuasOuMaisLetrasMaiusculasConsecutivas(copyInputDerivacao)) {
+                !contemDuasOuMaisLetrasMaiusculasConsecutivas(copyInputDerivacao) && copyInputDerivacao.length() > 1) {
 
               possibilidades.add(copyInputDerivacao);
             }
@@ -133,7 +133,7 @@ public class teste {
       }
 
       if (!possibilidades.contains(copyInputDerivacao) &&
-          !contemDuasOuMaisLetrasMaiusculasConsecutivas(copyInputDerivacao)) {
+          !contemDuasOuMaisLetrasMaiusculasConsecutivas(copyInputDerivacao) && copyInputDerivacao.length() > 1) {
         possibilidades.add(copyInputDerivacao);
       }
 
@@ -147,14 +147,14 @@ public class teste {
   }
 
   // public static void main(String[] args) {
-  //   String input = "AaAaAaA";
-  //   char target = 'A';
+  // String input = "AaAaAaA";
+  // char target = 'A';
 
-  //   List<String> resp = new ArrayList<>();
+  // List<String> resp = new ArrayList<>();
 
-  //   resp = iniciandoDerivacaoPalavra(input, target);
+  // resp = iniciandoDerivacaoPalavra(input, target);
 
-  //   "".toString();
+  // "".toString();
 
   // }
 

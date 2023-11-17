@@ -3,8 +3,6 @@ package Componentes.CNF;
 import Componentes.Gramatica;
 
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class RemoverTransicoesVazias {
 
@@ -45,28 +43,6 @@ public class RemoverTransicoesVazias {
 
   /**
    * 
-   * @param input
-   * @return
-   */
-  private static boolean contemLetrasMaiusculasIguais(String input) {
-    Set<Character> letrasMaiusculas = new HashSet<>();
-
-    for (char caractere : input.toCharArray()) {
-      if (Character.isUpperCase(caractere)) {
-        // Se já contém a letra maiúscula, retornar true
-        if (letrasMaiusculas.contains(caractere)) {
-          return true;
-        }
-        letrasMaiusculas.add(caractere);
-      }
-    }
-
-    // Se chegou até aqui, significa que não há letras maiúsculas iguais
-    return false;
-  }
-
-  /**
-   * 
    * @param transicoesVazias
    * @param glc
    * @return
@@ -87,36 +63,26 @@ public class RemoverTransicoesVazias {
       for (String elementoLista : regras) {
         for (String eachTV : transicoesVazias) {
           if (elementoLista.contains(eachTV)) {
-            System.out.println(contemLetrasMaiusculasIguais(elementoLista));
 
-            if (contemLetrasMaiusculasIguais(elementoLista)) {
-              "".toString();
-
-              System.out.println("Elemento lista: " + elementoLista + " EACHTV: " + eachTV + "\n\n\n");
-              List<String> possibilidades = teste.iniciandoDerivacaoPalavra(elementoLista, eachTV.charAt(0));
-              System.out.println("POSSIBILIDADES: " + possibilidades);
-
-              "".toString();
+            if (elementoLista.length() == 2) {
 
               String resultado = elementoLista.replace(eachTV, "");
 
-              if (resultado != "" && !regrasCopy.contains(resultado)) {
-                for (String string : possibilidades) {
-                  regrasCopy.add(string);
-                }
+              if (!regrasCopy.contains(resultado)) {
                 regrasCopy.add(resultado);
+
               }
+
             } else {
 
-              "".toString();
+              List<String> possibilidades = teste.iniciandoDerivacaoPalavra(elementoLista, eachTV.charAt(0));
 
-              String resultado = elementoLista.replace(eachTV, "");
-
-              if (resultado != "" && !regrasCopy.contains(resultado)) {
-                regrasCopy.add(resultado);
+              for (String string : possibilidades) {
+                regrasCopy.add(string);
               }
             }
 
+            "".toString();
           }
         }
 
@@ -133,11 +99,16 @@ public class RemoverTransicoesVazias {
     List<String> transicoesVazias = new ArrayList<>();
     transicoesVazias.add("!");
 
+    Map<String, List<String>> copiaMapTransicoes = Gramatica.clonarGramatica(copiaMap);
+
+    // Pega lista de transicoes
     transicoesVazias = pegarTransicoesVazias(transicoesVazias, copiaMap);
-    copiaMap = removendoLambdadaGramatica(transicoesVazias, copiaMap);
+
+    // Inicio da remocao de lambda
+    copiaMapTransicoes = removendoLambdadaGramatica(transicoesVazias, copiaMapTransicoes);
     "".toString();
 
-    return copiaMap;
+    return copiaMapTransicoes;
 
   }
 }
