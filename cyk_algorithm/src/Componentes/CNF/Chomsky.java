@@ -45,6 +45,28 @@ public class Chomsky {
 
   /**
    * 
+   * @param input
+   * @return
+   */
+  private static boolean contemLetrasMaiusculasIguais(String input) {
+    Set<Character> letrasMaiusculas = new HashSet<>();
+
+    for (char caractere : input.toCharArray()) {
+      if (Character.isUpperCase(caractere)) {
+        // Se já contém a letra maiúscula, retornar true
+        if (letrasMaiusculas.contains(caractere)) {
+          return true;
+        }
+        letrasMaiusculas.add(caractere);
+      }
+    }
+
+    // Se chegou até aqui, significa que não há letras maiúsculas iguais
+    return false;
+  }
+
+  /**
+   * 
    * @param transicoesVazias
    * @param glc
    * @return
@@ -66,8 +88,10 @@ public class Chomsky {
         for (String eachTV : transicoesVazias) {
           System.out.println(elementoLista);
           if (elementoLista.contains(eachTV)) {
+            System.out.println(contemLetrasMaiusculasIguais(elementoLista));
 
-            if (elementoLista.length() >= 3) {
+            if (contemLetrasMaiusculasIguais(elementoLista)) {
+              "".toString();
 
               List<String> possibilidades = new ArrayList<>();
 
@@ -86,13 +110,23 @@ public class Chomsky {
 
                 }
               }
-            }
 
-            String resultado = elementoLista.replace(eachTV, "");
-            // List<String> combinacoes = gerarCombinacoes(elementoLista);
+              "".toString();
 
-            if (resultado != "") {
-              regrasCopy.add(resultado);
+              String resultado = elementoLista.replace(eachTV, "");
+
+              if (resultado != "") {
+                regrasCopy.add(resultado);
+              }
+            } else {
+
+              "".toString();
+
+              String resultado = elementoLista.replace(eachTV, "");
+
+              if (resultado != "") {
+                regrasCopy.add(resultado);
+              }
             }
 
           }
