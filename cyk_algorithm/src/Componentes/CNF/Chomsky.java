@@ -14,6 +14,10 @@ public class Chomsky {
     this.glc = ut.getGramaticaLida();
   }
 
+  // private int qtdLetraMaiusculaCalc(String palavra){
+
+  // }
+
   /**
    * 
    * @param transicoesVazias
@@ -74,7 +78,7 @@ public class Chomsky {
   private Map<String, List<String>> removendoLambdadaGramatica(List<String> transicoesVazias,
       Map<String, List<String>> glc) {
 
-    Map<String, List<String>> glcCopy = new HashMap<>(glc);
+    Map<String, List<String>> glcCopy = new LinkedHashMap<>(glc);
 
     for (Map.Entry<String, List<String>> each : glc.entrySet()) {
       String naoTerminal = each.getKey();
@@ -94,6 +98,7 @@ public class Chomsky {
               "".toString();
 
               List<String> possibilidades = new ArrayList<>();
+              // BaBaB
 
               for (int i = 0; i < elementoLista.length(); i++) {
                 StringBuilder sb = new StringBuilder(elementoLista);
@@ -124,7 +129,7 @@ public class Chomsky {
 
               String resultado = elementoLista.replace(eachTV, "");
 
-              if (resultado != ""  && !regrasCopy.contains(resultado)) {
+              if (resultado != "" && !regrasCopy.contains(resultado)) {
                 regrasCopy.add(resultado);
               }
             }
