@@ -1,0 +1,94 @@
+package Componentes.CNF;
+
+import Componentes.*;
+import java.util.*;
+
+public class Chomsky {
+
+  Map<String, List<String>> glc;
+
+  public Chomsky(Gramatica ut) {
+    this.glc = ut.getGramaticaLida();
+  }
+
+  public Map<String, List<String>> removerProducoesVazias() {
+    Set<String> variaveisComProducaoVazia = new HashSet<>();
+
+    // Passo 1: Adicionar não-terminais com regras vazias diretas
+    for (Map.Entry<String, List<String>> entry : glc.entrySet()) {
+      String naoTerminal = entry.getKey();
+      List<String> regras = entry.getValue();
+
+      if (regras.contains("!")) {
+        variaveisComProducaoVazia.add(naoTerminal);
+        glc.get(naoTerminal).remove("!"); // Remover produção vazia
+      }
+    }
+
+    // Passo 2: Adicionar não-terminais com regras vazias indiretas
+    boolean producaoVaziaAdicionada;
+    do {
+      producaoVaziaAdicionada = false;
+
+      for (Map.Entry<String, List<String>> entry : glc.entrySet()) {
+        String naoTerminal = entry.getKey();
+        List<String> regras = entry.getValue();
+
+        List<String> regrasNovas = new ArrayList<>(regras);
+
+        for (String regra : regras) {
+          if (contemVariaveisComProducaoVazia(regra, variaveisComProducaoVazia)) {
+            variaveisComProducaoVazia.add(naoTerminal);
+            producaoVaziaAdicionada = true;
+          }
+        }
+
+        // Atualizar as regras da gramática removendo produções vazias
+        regrasNovas = regrasNovas.stream()
+            .filter(regra -> !regra.isEmpty())
+            .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+
+        glc.put(naoTerminal, regrasNovas);
+      }
+    } while (producaoVaziaAdicionada);
+
+    // Passo 3: Criar as novas regras necessárias
+    Map<String, List<String>> novaGramatica = criarNovaGramatica(variaveisComProducaoVazia);
+
+    return novaGramatica;
+  }
+
+  private boolean contemVariaveisComProducaoVazia(String regra, Set<String> variaveisComProducaoVazia) {
+    for (char c : regra.toCharArray()) {
+      if (Character.isUpperCase(c) && variaveisComProducaoVazia.contains(String.valueOf(c))) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private Map<String, List<String>> criarNovaGramatica(Set<String> variaveisComProducaoVazia) {
+    Map<String, List<String>> novaGramatica = new LinkedHashMap<>();
+
+    for (Map.Entry<String, List<String>> entry : glc.entrySet()) {
+      String naoTerminal = entry.getKey();
+      List<String> regras = entry.getValue();
+
+      List<String> regrasFinais = new ArrayList<>(regras);
+
+      for (String regra : regras) {
+        for (char c : regra.toCharArray()) {
+          String variavel = String.valueOf(c);
+          if (Character.isUpperCase(c) && variaveisComProducaoVazia.contains(variavel)) {
+            // Adicionar as regras da variável com produção vazia
+            regrasFinais.addAll(glc.get(variavel));
+          }
+        }
+      }
+
+      novaGramatica.put(naoTerminal, regrasFinais);
+    }
+
+    return novaGramatica;
+  }
+}

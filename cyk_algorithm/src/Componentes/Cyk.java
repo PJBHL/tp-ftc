@@ -63,14 +63,6 @@ public class Cyk {
    * @param word
    * @return
    */
-  // 1 caso
-  // S -> NP | VP
-  // NP -> batata
-  // VP -> vini
-  // 2 caso
-  // vini batata
-  // 3 caso
-  // vini batata
   public boolean isInAlphabet(Map<String, List<String>> gramatica, String word) {
 
     // Criando lista de string char

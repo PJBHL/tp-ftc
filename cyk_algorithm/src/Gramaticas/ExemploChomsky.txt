@@ -1,0 +1,55 @@
+Legenda: ! = lambda
+
+
+
+S -> ASA | aB
+A -> B | S
+B -> b | !
+
+1) Introduzir nova regra inicial:
+S0 -> S
+S -> ASA | aB
+A -> B | S
+B -> b | !
+
+2) Remover regras da forma X -> ! (B -> !):
+- Regras da forma não terminal -> que geram lambda.
+
+S0 -> S
+S -> ASA | aB
+A -> B | S | !
+B -> b 
+(As que você eliminou nunca pode colocar de volta).
+
+2) Remover regras da forma X -> ! (A -> !):
+
+S0 -> S
+S -> ASA | aB | a | SA | AS
+A -> B | S
+B -> b
+
+3) Remover regras unitárias (A -> B | S)
+- Pega o conteúdo de "B" e "S" e copia para "A".
+S0 -> S
+S -> ASA | aB | a | SA | AS
+A -> b | ASA | aB | a | SA | AS
+B -> b
+
+4) Converter as Regras remanecentes:
+S0 -> S (Essa regra inicial pode ser removida agora).
+
+
+S -> b | AA1 | UB | a | SA | AS
+A -> b | AA1 | UB | a | SA | AS
+A1 -> SA
+U -> a
+B -> b
+
+Restrições da regra de Chomsky:
+
+Os elementos na regra de Chomsky seguem as seguintes restrições:
+-> Os elementos devem ser ou dois símbolos não terminais ou apenas um terminal.
+Exemplo:
+
+A -> BC
+A -> a

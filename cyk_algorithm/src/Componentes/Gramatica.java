@@ -5,8 +5,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 
 public class Gramatica {
@@ -102,13 +104,30 @@ public class Gramatica {
     br.close();
     return gramatica;
   }
+  
+  public static void imprimirGramatica(Map<String, List<String>> gramatica) {
+        Set<String> naoTerminaisImprimidos = new HashSet<>();
 
-  // public void asd(Map<String, List<String>> mapinho) {
+        for (Map.Entry<String, List<String>> entry : gramatica.entrySet()) {
+            String variavel = entry.getKey();
+            List<String> regras = entry.getValue();
 
-  // mapinho.forEach((key, value)->{
+            if (!naoTerminaisImprimidos.contains(variavel)) {
+                System.out.print(variavel + " -> ");
+                imprimirConjuntoDeRegras(regras);
+                naoTerminaisImprimidos.add(variavel);
+            }
+        }
+    }
 
-  // System.out.println(key + "=" + value);
-  // });
-
-  // }
+    private static void imprimirConjuntoDeRegras(List<String> regras) {
+        System.out.print("{");
+        for (int i = 0; i < regras.size(); i++) {
+            System.out.print(regras.get(i));
+            if (i < regras.size() - 1) {
+                System.out.print(" | ");
+            }
+        }
+        System.out.println("}");
+    }
 }
