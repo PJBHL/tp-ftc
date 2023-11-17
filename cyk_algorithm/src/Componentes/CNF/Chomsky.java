@@ -115,7 +115,7 @@ public class Chomsky {
 
               String resultado = elementoLista.replace(eachTV, "");
 
-              if (resultado != "") {
+              if (resultado != "" && !regrasCopy.contains(resultado)) {
                 regrasCopy.add(resultado);
               }
             } else {
@@ -124,7 +124,7 @@ public class Chomsky {
 
               String resultado = elementoLista.replace(eachTV, "");
 
-              if (resultado != "") {
+              if (resultado != ""  && !regrasCopy.contains(resultado)) {
                 regrasCopy.add(resultado);
               }
             }
