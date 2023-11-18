@@ -1,25 +1,6 @@
 package Componentes.CNF;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-// BaBa 
-// Baa
-// aBa
-// aa
-
-// codigo
-// -> BaBaB
-// BaaB
-// BaBa
-// Baa
-// aBaB
-// aBa
-// aaB
+import java.util.*;
 
 public class teste {
 
@@ -77,58 +58,21 @@ public class teste {
 
     for (Integer posicao : posicoesMaiusculas) {
       for (int i = 0; i < qntExcluir; i++) {
-        for (Integer posi : posicoesMaiusculas) {
-          System.out.println("Trava no " + posicoesMaiusculas.get(posicao) + ": excluir = " + (i + 1) + ".");
+        "".toString();
+        List<Integer> copyPosicoes = new ArrayList<>(posicoesMaiusculas);
+        copyPosicoes.remove(posicao);
+        List<List<Integer>> combinacoes = Combinacoes.gerarCombinacoes(copyPosicoes, i + 1);
+        for (List<Integer> integer : combinacoes) {
           String copyInput = new String(input);
-          if (posicao != posi) {
-            List<Integer> temp = new ArrayList<>(posicoesMaiusculas);
-            temp.remove(posicao);
-            List<String> tempDerivacoes;
-            copyInput = excluirLetrasPorPosicao(copyInput, temp);
+          copyInput = excluirLetrasPorPosicao(input, integer);
+          if(!derivacoes.contains(copyInput))
             derivacoes.add(copyInput);
-            System.out.println("Derivacao adicionada: " + copyInput);
-          }
         }
       }
     }
 
     return derivacoes;
   }
-
-  // public static String excluirLetras(String input, int qnt, int[] posicoes) {
-  //   // Inicializa um StringBuilder para construir a nova string
-  //   StringBuilder resultado = new StringBuilder();
-
-  //   // Percorre a string original
-  //   for (int i = 0; i < input.length(); i++) {
-  //     // Verifica se a letra atual é maiúscula e não está na posição travada
-  //     if (Character.isUpperCase(input.charAt(i))) {
-  //       // Verifica se ainda há letras maiúsculas a serem removidas
-  //       if (qnt > 0) {
-  //         qnt--;
-  //       } else {
-  //         // Adiciona a letra ao resultado se não precisar ser removida
-  //         resultado.append(input.charAt(i));
-  //       }
-  //     } else {
-  //       // Adiciona a letra ao resultado se não for maiúscula ou estiver na posição
-  //       // travada
-  //       resultado.append(input.charAt(i));
-  //     }
-  //   }
-
-  //   // Converte o StringBuilder de volta para uma string
-  //   return resultado.toString();
-  // }
-
-  // private static boolean isPosicaoTravada(int posicao, int[] posicoesTravadas) {
-  //   for(int i : posicoesTravadas) {
-  //     if(posicao == i)
-  //       return true;
-  //   }
-
-  //   return false;
-  // }
 
   private static String excluirLetrasPorPosicao(String input, List<Integer> posicoesExcluir) {
     StringBuilder resultado = new StringBuilder(input);
@@ -146,19 +90,4 @@ public class teste {
 
     return resultado.toString();
   }
-
-  public static void main(String[] args) {
-    // String input = "AaAaAaA";
-    // char target = 'A';
-    // // System.out.println(excluirLetras(input, 2, 2));
-
-    // List<String> resp = new ArrayList<>();
-
-    // resp = derivacaoPalavra(input, target);
-
-    // System.out.println(resp);
-
-    // "".toString();
-  }
-
 }
