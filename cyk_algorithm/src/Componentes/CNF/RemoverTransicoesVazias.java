@@ -1,11 +1,9 @@
 package Componentes.CNF;
 
 import Componentes.Gramatica;
-
 import java.util.*;
 
 public class RemoverTransicoesVazias {
-
   static Map<String, List<String>> glc;
 
   public RemoverTransicoesVazias(Gramatica gramatica) {
@@ -13,15 +11,15 @@ public class RemoverTransicoesVazias {
   }
 
   /**
+   * Método para pegar os Não Terminais com as transições vazias, diretos e
+   * indiretos.
    * 
-   * @param transicoesVazias
-   * @param glcCopy
-   * @return
+   * @param transicoesVazias - lista com os não terminais que contém lambda.
+   * @param copyGlc          - cópia da gramática.
+   * @return - retorna a lista de transições vazias.
    */
   private static List<String> pegarTransicoesVazias(List<String> transicoesVazias, Map<String, List<String>> copyGlc) {
-
     for (Map.Entry<String, List<String>> each : copyGlc.entrySet()) {
-
       String naoTerminal = each.getKey();
       List<String> regrasCopy = each.getValue();
 
@@ -32,20 +30,21 @@ public class RemoverTransicoesVazias {
 
           return pegarTransicoesVazias(transicoesVazias, copyGlc);
         }
-
       }
-
     }
+
     transicoesVazias.remove("!");
     return transicoesVazias;
-
   }
 
   /**
+   * Método para remover o lambda da gramática, concertando e criando novas regras
+   * caso necessário.
    * 
-   * @param transicoesVazias
-   * @param glc
-   * @return
+   * @param transicoesVazias - lista com os não terminais que possuem transições
+   *                         vazias (diretas e indiretas).
+   * @param glc              - Gramática usada.
+   * @return - Retorna uma gramática com o lambda removido.
    */
   private static Map<String, List<String>> removendoLambdadaGramatica(List<String> transicoesVazias,
       Map<String, List<String>> glc) {
@@ -55,46 +54,40 @@ public class RemoverTransicoesVazias {
     for (Map.Entry<String, List<String>> each : glc.entrySet()) {
       String naoTerminal = each.getKey();
       List<String> regras = each.getValue();
-      if (regras.contains("!")) {
+      if (regras.contains("!"))
         regras.remove("!");
-      }
+      
       List<String> regrasCopy = new ArrayList<>(regras);
 
       for (String elementoLista : regras) {
         for (String eachTV : transicoesVazias) {
           if (elementoLista.contains(eachTV)) {
-
             if (elementoLista.length() == 2) {
-
               String resultado = elementoLista.replace(eachTV, "");
-
-              if (!regrasCopy.contains(resultado)) {
+              
+              if (!regrasCopy.contains(resultado))
                 regrasCopy.add(resultado);
 
-              }
-
             } else {
+              List<String> possibilidades = Derivacoes.derivacaoPalavra(elementoLista, eachTV.charAt(0));
 
-              List<String> possibilidades = teste.derivacaoPalavra(elementoLista, eachTV.charAt(0));
-
-              for (String string : possibilidades) {
+              for (String string : possibilidades)
                 regrasCopy.add(string);
-              }
             }
-
-            "".toString();
           }
         }
 
       }
       glcCopy.put(naoTerminal, regrasCopy);
-
     }
-
     return glcCopy;
-
   }
 
+  /**
+   * Método para chamar as outras funções.
+   * @param copiaMap - Cópia da gramática lida para manipulação.
+   * @return
+   */
   public static Map<String, List<String>> eliminarProducoesVazias(Map<String, List<String>> copiaMap) {
     List<String> transicoesVazias = new ArrayList<>();
     transicoesVazias.add("!");
@@ -106,12 +99,7 @@ public class RemoverTransicoesVazias {
 
     // Inicio da remocao de lambda
     copiaMapTransicoes = removendoLambdadaGramatica(transicoesVazias, copiaMapTransicoes);
-    "".toString();
-
-    System.out.println("\nGramatica tirando Lambda: \n");
-    Gramatica.imprimirGramatica(copiaMapTransicoes);
 
     return copiaMapTransicoes;
-
   }
 }
