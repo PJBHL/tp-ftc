@@ -1,0 +1,4 @@
+S -> AB | BC
+A -> a | BA
+B -> CC | b
+C -> a | AB
