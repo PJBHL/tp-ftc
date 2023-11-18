@@ -17,6 +17,8 @@ public class App {
     // else
     // System.out.println("A sentença nao pertence ao alfabeto");
     Gramatica ut = new Gramatica(args[0]);
+    System.out.println("\nGramatica lida: \n");
+    Gramatica.imprimirGramatica(ut.getGramaticaLida());
     Chomsky chomchom = new Chomsky(ut);
   }
 }

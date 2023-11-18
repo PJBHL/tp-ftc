@@ -19,6 +19,5 @@ public class Chomsky {
     Map<String, List<String>> copiaMap = Gramatica.clonarGramatica(this.glc);
 
     this.glc = RemoverTransicoesVazias.eliminarProducoesVazias(copiaMap);
-    Gramatica.imprimirGramatica(this.glc);
   }
 }

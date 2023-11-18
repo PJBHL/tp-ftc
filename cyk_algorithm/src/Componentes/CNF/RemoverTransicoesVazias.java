@@ -75,7 +75,7 @@ public class RemoverTransicoesVazias {
 
             } else {
 
-              List<String> possibilidades = teste.iniciandoDerivacaoPalavra(elementoLista, eachTV.charAt(0));
+              List<String> possibilidades = teste.derivacaoPalavra(elementoLista, eachTV.charAt(0));
 
               for (String string : possibilidades) {
                 regrasCopy.add(string);
@@ -107,6 +107,9 @@ public class RemoverTransicoesVazias {
     // Inicio da remocao de lambda
     copiaMapTransicoes = removendoLambdadaGramatica(transicoesVazias, copiaMapTransicoes);
     "".toString();
+
+    System.out.println("\nGramatica tirando Lambda: \n");
+    Gramatica.imprimirGramatica(copiaMapTransicoes);
 
     return copiaMapTransicoes;
 

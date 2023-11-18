@@ -1,5 +1,3 @@
 S -> ASA | aB | a
 A -> B | S
 B -> b | !
-
-[A,B]
