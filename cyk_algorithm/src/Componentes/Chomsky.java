@@ -15,14 +15,17 @@ public class Chomsky {
 
   public Chomsky(Gramatica ut) {
     this.glc = ut.getGramaticaLida();
-
+    
+    System.out.println("\nGramatica Lida: \n");
     Map<String, List<String>> copiaMap = Gramatica.clonarGramatica(this.glc);
+    Gramatica.imprimirGramatica(copiaMap);
 
     System.out.println("\nGramatica tirando Lambda: \n");
     copiaMap = RemoverTransicoesVazias.eliminarProducoesVazias(this.glc);
     Gramatica.imprimirGramatica(copiaMap);
-    copiaMap = RemoverTransicoesUnitarias.removerUnitarios(copiaMap);
+
     System.out.println("\nGramatica tirando Unitários: \n");
+    copiaMap = RemoverTransicoesUnitarias.removerUnitarios(copiaMap);
     Gramatica.imprimirGramatica(copiaMap);
   }
 }
