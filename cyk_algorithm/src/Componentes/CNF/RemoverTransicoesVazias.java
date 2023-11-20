@@ -71,8 +71,10 @@ public class RemoverTransicoesVazias {
             } else {
               List<String> possibilidades = Derivacoes.derivacaoPalavra(elementoLista, eachTV.charAt(0));
 
-              for (String string : possibilidades)
-                regrasCopy.add(string);
+              for (String string : possibilidades) {
+                if(string != "")
+                  regrasCopy.add(string);
+              }
             }
           }
         }
