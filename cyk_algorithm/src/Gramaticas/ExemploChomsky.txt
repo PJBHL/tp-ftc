@@ -32,7 +32,7 @@ B -> b
 - Pega o conteúdo de "B" e "S" e copia para "A".
 S0 -> S
 S -> ASA | aB | a | SA | AS
-A -> b | ASA | aB | a | SA | AS
+A -> b | ASA | aB | a | AS | SA
 B -> b
 
 4) Converter as Regras remanecentes:

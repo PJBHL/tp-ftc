@@ -19,7 +19,10 @@ public class Chomsky {
     Map<String, List<String>> copiaMap = Gramatica.clonarGramatica(this.glc);
 
     System.out.println("\nGramatica tirando Lambda: \n");
-    this.glc = RemoverTransicoesVazias.eliminarProducoesVazias(copiaMap);
-    Gramatica.imprimirGramatica(this.glc);
+    copiaMap = RemoverTransicoesVazias.eliminarProducoesVazias(this.glc);
+    Gramatica.imprimirGramatica(copiaMap);
+    copiaMap = RemoverTransicoesUnitarias.removerUnitarios(copiaMap);
+    System.out.println("\nGramatica tirando Unitários: \n");
+    Gramatica.imprimirGramatica(copiaMap);
   }
 }

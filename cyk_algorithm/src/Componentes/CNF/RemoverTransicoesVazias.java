@@ -4,12 +4,6 @@ import Componentes.Gramatica;
 import java.util.*;
 
 public class RemoverTransicoesVazias {
-  static Map<String, List<String>> glc;
-
-  public RemoverTransicoesVazias(Gramatica gramatica) {
-    glc = gramatica.getGramaticaLida();
-  }
-
   /**
    * Método para pegar os Não Terminais com as transições vazias, diretos e
    * indiretos.
