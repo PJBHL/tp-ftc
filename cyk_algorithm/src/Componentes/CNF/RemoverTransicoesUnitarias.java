@@ -33,16 +33,33 @@ import Componentes.Gramatica;
 public class RemoverTransicoesUnitarias {
     public static Map<String, List<String>> removerUnitarios(Map<String, List<String>> glc) {
         List<String> transicoesUnitarias = pegarTransicoesUnitarias(glc);
-        Map<String, List<String>> glcCopy = removendoTransicoesUnitarias(transicoesUnitarias, glc);
+        Map<String, List<String>> glcCopy = removerRegrasInuteis(glc);
+        glcCopy = removendoTransicoesUnitarias(transicoesUnitarias, glcCopy);
 
         return glcCopy;
     }
 
-    // public static Map<String, List<String>> removerRegrasInuteis(Map<String, List<String>> glc) {
-    //     Map<String, List<String>> glcCopy;
+    /**
+     * Remoção possíveis regras inúteis da gramática, geradas na derivação. Exemplo:
+     * S -> A | S
+     * (S gerando ele mesmo).
+     * 
+     * @param glc - gramática para remover as regras.
+     * @return - nova gramática com regras inúteis removidas.
+     */
+    public static Map<String, List<String>> removerRegrasInuteis(Map<String, List<String>> glc) {
+        Map<String, List<String>> glcCopy = Gramatica.clonarGramatica(glc);
 
-    //     return glcCopy;
-    // }
+        for (Map.Entry<String, List<String>> each : glc.entrySet()) {
+            String naoTerminal = each.getKey();
+            List<String> regras = each.getValue();
+
+            if (regras.contains(naoTerminal))
+                glcCopy.get(naoTerminal).remove(naoTerminal);
+        }
+
+        return glcCopy;
+    }
 
     /**
      * Método para percorrer a gramática e pegar quais não terminais possuem
@@ -104,7 +121,7 @@ public class RemoverTransicoesUnitarias {
             List<String> regras = each.getValue();
 
             for (String regra : regras) {
-                if(transicoesUnitarias.contains(regra)) {
+                if (transicoesUnitarias.contains(regra)) {
                     List<String> copyRegras = pegarRegras(regra, gramatica);
                     novaGramatica.get(naoTerminal).remove(regra);
                     novaGramatica.get(naoTerminal).addAll(copyRegras);
