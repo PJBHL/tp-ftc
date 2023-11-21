@@ -15,7 +15,7 @@ public class Chomsky {
 
   public Chomsky(Gramatica ut) {
     this.glc = ut.getGramaticaLida();
-    
+
     System.out.println("\nGramatica Lida: \n");
     Map<String, List<String>> copiaMap = Gramatica.clonarGramatica(this.glc);
     Gramatica.imprimirGramatica(copiaMap);
@@ -27,5 +27,10 @@ public class Chomsky {
     System.out.println("\nGramatica tirando Unitários: \n");
     copiaMap = RemoverTransicoesUnitarias.removerUnitarios(copiaMap);
     Gramatica.imprimirGramatica(copiaMap);
+
+    System.out.println("\nGramatica em CNF: \n");
+    copiaMap = FormaNormalChomsky.convertToCNF(copiaMap);
+    Gramatica.imprimirGramatica(copiaMap);
+
   }
 }
