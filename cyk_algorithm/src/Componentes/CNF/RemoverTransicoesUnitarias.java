@@ -31,105 +31,112 @@ import Componentes.Gramatica;
  * C -> cC | c
  */
 public class RemoverTransicoesUnitarias {
-  public static Map<String, List<String>> removerUnitarios(Map<String, List<String>> glc) {
-    List<String> transicoesUnitarias = pegarTransicoesUnitarias(glc);
-    Map<String, List<String>> glcCopy = removerRegrasInuteis(glc);
-    glcCopy = removendoTransicoesUnitarias(transicoesUnitarias, glcCopy);
-
-    return glcCopy;
-  }
-
-  /**
-   * Remoção possíveis regras inúteis da gramática, geradas na derivação. Exemplo:
-   * S -> A | S
-   * (S gerando ele mesmo).
-   * 
-   * @param glc - gramática para remover as regras.
-   * @return - nova gramática com regras inúteis removidas.
-   */
-  public static Map<String, List<String>> removerRegrasInuteis(Map<String, List<String>> glc) {
-    Map<String, List<String>> glcCopy = Gramatica.clonarGramatica(glc);
-
-    for (Map.Entry<String, List<String>> each : glc.entrySet()) {
-      String naoTerminal = each.getKey();
-      List<String> regras = each.getValue();
-
-      if (regras.contains(naoTerminal))
-        glcCopy.get(naoTerminal).remove(naoTerminal);
-    }
-
-    return glcCopy;
-  }
-
-  /**
-   * Método para percorrer a gramática e pegar quais não terminais possuem
-   * transições vazias.
-   * 
-   * @param gramatica - gramática.
-   * @return - lista de string com variáveis que possuem transição vazia.
-   */
-  public static List<String> pegarTransicoesUnitarias(Map<String, List<String>> gramatica) {
-    List<String> transicoesUnitarias = new ArrayList<>();
-
-    for (Map.Entry<String, List<String>> each : gramatica.entrySet()) {
-      // String naoTerminal = each.getKey();
-      List<String> regras = each.getValue();
-
-      for (String regra : regras) {
-        if (regra.length() == 1 && Character.isUpperCase(regra.charAt(0))) {
-          transicoesUnitarias.add(regra);
+    public static Map<String, List<String>> removerUnitarios(Map<String, List<String>> glc) {
+        Map<String, List<String>> glcCopy = removerRegrasInuteis(glc);
+        List<String> transicoesUnitarias = pegarTransicoesUnitarias(glcCopy);
+        while (!transicoesUnitarias.isEmpty()) {
+            glcCopy = removendoTransicoesUnitarias(transicoesUnitarias, glcCopy);
+            transicoesUnitarias = pegarTransicoesUnitarias(glcCopy);
         }
-      }
+
+        return glcCopy;
     }
 
-    return transicoesUnitarias;
-  }
+    /**
+     * Remoção possíveis regras inúteis da gramática, geradas na derivação. Exemplo:
+     * S -> A | S
+     * (S gerando ele mesmo).
+     * 
+     * @param glc - gramática para remover as regras.
+     * @return - nova gramática com regras inúteis removidas.
+     */
+    public static Map<String, List<String>> removerRegrasInuteis(Map<String, List<String>> glc) {
+        Map<String, List<String>> glcCopy = Gramatica.clonarGramatica(glc);
 
-  /**
-   * Método para pegar as regras de um não terminal que possui transição unitária
-   * em algum lugar da gramática.
-   * Exemplo:
-   * S -> A
-   * A -> aA | A
-   * return será as regras de A, ou seja, [aA, A].
-   * 
-   * @param naoTerminal - não terminal para recolher as regras.
-   * @param gramatica   - gramática.
-   */
-  public static List<String> pegarRegras(String naoTerminal, Map<String, List<String>> gramatica) {
-    List<String> regrasCopy = new ArrayList<>();
+        // Removendo Regras que geram elas mesmas.
+        for (Map.Entry<String, List<String>> each : glc.entrySet()) {
+            String naoTerminal = each.getKey();
+            List<String> regras = each.getValue();
 
-    regrasCopy = gramatica.get(naoTerminal);
-
-    return regrasCopy;
-  }
-
-  /**
-   * Método para efetivamente remover as transições unitárias gramática.
-   * 
-   * @param transicoesUnitarias - Lista com não terminais que possuem transição
-   *                            unitária.
-   * @param gramatica           - gramática.
-   * @return - nova gramática sem transições unitárias.
-   */
-  public static Map<String, List<String>> removendoTransicoesUnitarias(List<String> transicoesUnitarias,
-      Map<String, List<String>> gramatica) {
-    Map<String, List<String>> novaGramatica = Gramatica.clonarGramatica(gramatica);
-
-    for (Map.Entry<String, List<String>> each : gramatica.entrySet()) {
-      String naoTerminal = each.getKey();
-      List<String> regras = each.getValue();
-
-      for (String regra : regras) {
-        if (transicoesUnitarias.contains(regra)) {
-          List<String> copyRegras = pegarRegras(regra, gramatica);
-          novaGramatica.get(naoTerminal).remove(regra);
-          novaGramatica.get(naoTerminal).addAll(copyRegras);
-          "".toString();
+            if (regras.contains(naoTerminal))
+                glcCopy.get(naoTerminal).remove(naoTerminal);
         }
-      }
+
+        // Ainda é necessário remover regras que não são alcançáveis.
+        // Ou então regras ambiguas.
+
+        return glcCopy;
     }
 
-    return novaGramatica;
-  }
+    /**
+     * Método para percorrer a gramática e pegar quais não terminais possuem
+     * transições vazias.
+     * 
+     * @param gramatica - gramática.
+     * @return - lista de string com variáveis que possuem transição vazia.
+     */
+    public static List<String> pegarTransicoesUnitarias(Map<String, List<String>> gramatica) {
+        List<String> transicoesUnitarias = new ArrayList<>();
+
+        for (Map.Entry<String, List<String>> each : gramatica.entrySet()) {
+            // String naoTerminal = each.getKey();
+            List<String> regras = each.getValue();
+
+            for (String regra : regras) {
+                if (regra.length() == 1 && Character.isUpperCase(regra.charAt(0))) {
+                    transicoesUnitarias.add(regra);
+                }
+            }
+        }
+
+        return transicoesUnitarias;
+    }
+
+    /**
+     * Método para pegar as regras de um não terminal que possui transição unitária
+     * em algum lugar da gramática.
+     * Exemplo:
+     * S -> A
+     * A -> aA | A
+     * return será as regras de A, ou seja, [aA, A].
+     * 
+     * @param naoTerminal - não terminal para recolher as regras.
+     * @param gramatica   - gramática.
+     */
+    public static List<String> pegarRegras(String naoTerminal, Map<String, List<String>> gramatica) {
+        List<String> regrasCopy = new ArrayList<>();
+
+        regrasCopy = gramatica.get(naoTerminal);
+
+        return regrasCopy;
+    }
+
+    /**
+     * Método para efetivamente remover as transições unitárias gramática.
+     * 
+     * @param transicoesUnitarias - Lista com não terminais que possuem transição
+     *                            unitária.
+     * @param gramatica           - gramática.
+     * @return - nova gramática sem transições unitárias.
+     */
+    public static Map<String, List<String>> removendoTransicoesUnitarias(List<String> transicoesUnitarias,
+            Map<String, List<String>> gramatica) {
+        Map<String, List<String>> novaGramatica = Gramatica.clonarGramatica(gramatica);
+
+        for (Map.Entry<String, List<String>> each : gramatica.entrySet()) {
+            String naoTerminal = each.getKey();
+            List<String> regras = each.getValue();
+
+            for (String regra : regras) {
+                if (transicoesUnitarias.contains(regra)) {
+                    List<String> copyRegras = pegarRegras(regra, gramatica);
+                    novaGramatica.get(naoTerminal).remove(regra);
+                    novaGramatica.get(naoTerminal).addAll(copyRegras);
+                    "".toString();
+                }
+            }
+        }
+
+        return novaGramatica;
+    }
 }

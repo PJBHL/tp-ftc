@@ -31,6 +31,5 @@ public class Chomsky {
     System.out.println("\nGramatica em CNF: \n");
     copiaMap = FormaNormalChomsky.convertToCNF(copiaMap);
     Gramatica.imprimirGramatica(copiaMap);
-
   }
 }
