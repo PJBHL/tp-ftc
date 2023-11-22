@@ -76,7 +76,6 @@ public class Derivacoes {
 
     for (int posicao : posicoesExcluir) {
       if (posicao >= 0 && posicao < resultado.length()) {
-
         resultado.deleteCharAt(posicao);
       }
     }

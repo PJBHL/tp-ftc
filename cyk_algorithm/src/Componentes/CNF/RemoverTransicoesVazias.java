@@ -4,12 +4,6 @@ import Componentes.Gramatica;
 import java.util.*;
 
 public class RemoverTransicoesVazias {
-  static Map<String, List<String>> glc;
-
-  public RemoverTransicoesVazias(Gramatica gramatica) {
-    glc = gramatica.getGramaticaLida();
-  }
-
   /**
    * Método para pegar os Não Terminais com as transições vazias, diretos e
    * indiretos.
@@ -56,7 +50,7 @@ public class RemoverTransicoesVazias {
       List<String> regras = each.getValue();
       if (regras.contains("!"))
         regras.remove("!");
-      
+
       List<String> regrasCopy = new ArrayList<>(regras);
 
       for (String elementoLista : regras) {
@@ -64,15 +58,17 @@ public class RemoverTransicoesVazias {
           if (elementoLista.contains(eachTV)) {
             if (elementoLista.length() == 2) {
               String resultado = elementoLista.replace(eachTV, "");
-              
+
               if (!regrasCopy.contains(resultado))
                 regrasCopy.add(resultado);
 
             } else {
               List<String> possibilidades = Derivacoes.derivacaoPalavra(elementoLista, eachTV.charAt(0));
 
-              for (String string : possibilidades)
-                regrasCopy.add(string);
+              for (String string : possibilidades) {
+                if (string != "")
+                  regrasCopy.add(string);
+              }
             }
           }
         }
@@ -85,6 +81,7 @@ public class RemoverTransicoesVazias {
 
   /**
    * Método para chamar as outras funções.
+   * 
    * @param copiaMap - Cópia da gramática lida para manipulação.
    * @return
    */
@@ -99,6 +96,15 @@ public class RemoverTransicoesVazias {
 
     // Inicio da remocao de lambda
     copiaMapTransicoes = removendoLambdadaGramatica(transicoesVazias, copiaMapTransicoes);
+
+    // Add lambda no estado inicial
+    if (transicoesVazias.contains("S")) {
+
+      List<String> regras_cpy = new ArrayList<>(copiaMapTransicoes.get("S"));
+      regras_cpy.add("!");
+      copiaMapTransicoes.put("S", regras_cpy);
+
+    }
 
     return copiaMapTransicoes;
   }
