@@ -50,7 +50,7 @@ public class RemoverTransicoesVazias {
       List<String> regras = each.getValue();
       if (regras.contains("!"))
         regras.remove("!");
-      
+
       List<String> regrasCopy = new ArrayList<>(regras);
 
       for (String elementoLista : regras) {
@@ -58,7 +58,7 @@ public class RemoverTransicoesVazias {
           if (elementoLista.contains(eachTV)) {
             if (elementoLista.length() == 2) {
               String resultado = elementoLista.replace(eachTV, "");
-              
+
               if (!regrasCopy.contains(resultado))
                 regrasCopy.add(resultado);
 
@@ -66,7 +66,7 @@ public class RemoverTransicoesVazias {
               List<String> possibilidades = Derivacoes.derivacaoPalavra(elementoLista, eachTV.charAt(0));
 
               for (String string : possibilidades) {
-                if(string != "")
+                if (string != "")
                   regrasCopy.add(string);
               }
             }
@@ -81,6 +81,7 @@ public class RemoverTransicoesVazias {
 
   /**
    * Método para chamar as outras funções.
+   * 
    * @param copiaMap - Cópia da gramática lida para manipulação.
    * @return
    */
@@ -95,6 +96,15 @@ public class RemoverTransicoesVazias {
 
     // Inicio da remocao de lambda
     copiaMapTransicoes = removendoLambdadaGramatica(transicoesVazias, copiaMapTransicoes);
+
+    // Add lambda no estado inicial
+    if (transicoesVazias.contains("S")) {
+
+      List<String> regras_cpy = new ArrayList<>(copiaMapTransicoes.get("S"));
+      regras_cpy.add("!");
+      copiaMapTransicoes.put("S", regras_cpy);
+
+    }
 
     return copiaMapTransicoes;
   }
