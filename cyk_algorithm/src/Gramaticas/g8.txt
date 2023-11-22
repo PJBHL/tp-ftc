@@ -1,4 +1,2 @@
-S -> A
-A -> B
-B -> C
-C -> c | !
+S -> AaAaAaA
+A -> a | !
