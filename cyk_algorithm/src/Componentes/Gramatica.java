@@ -197,4 +197,85 @@ public class Gramatica {
     }
     return terminais;
   }
+
+  /**
+   * Método para verificar se determinada regra obedece as específicações da forma
+   * de chomsky, ou seja,
+   * S -> AB
+   * ou
+   * S -> a
+   * 
+   * @param regra - regra analisada
+   * @return - true caso seja valida
+   */
+  public static boolean isValidChomsky(String regra) {
+    List<String> naoTerminais = caracteresMaiusculos(regra);
+    int quantidadeNaoTerminais = naoTerminais.size();
+
+    Set<String> terminais = caracteresMinusculos(regra);
+    int quantidadeTerminais = terminais.size();
+
+    if ((quantidadeTerminais == 1 && quantidadeNaoTerminais == 0 && regra.length() == 1) ||
+        (quantidadeNaoTerminais == 2 && quantidadeTerminais == 0)) {
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
+   * Método para extrair em uma lista todos os caracteres minusculus (não
+   * repetindo) de determinada string de input.
+   * 
+   * @param input
+   * @return
+   */
+  public static Set<String> caracteresMinusculos(String input) {
+    Set<String> caracteresUnicos = new HashSet<>();
+
+    for (int i = 0; i < input.length(); i++) {
+      char caractere = input.charAt(i);
+      if (Character.isLowerCase(caractere)) {
+        caracteresUnicos.add(String.valueOf(caractere));
+      }
+    }
+
+    return caracteresUnicos;
+  }
+
+  /**
+   * Método para extrair em uma lista todos os caracteres maiusculos (podendo
+   * repetir) de determinada string de input.
+   * 
+   * @param input
+   * @return
+   */
+  public static List<String> caracteresMaiusculos(String input) {
+    List<String> caracteresUnicos = new ArrayList<>();
+
+    for (int i = 0; i < input.length(); i++) {
+      char caractere = input.charAt(i);
+      if (Character.isUpperCase(caractere)) {
+        caracteresUnicos.add(String.valueOf(caractere));
+      }
+    }
+
+    return caracteresUnicos;
+  }
+
+  /**
+   * Método para verificar se a gramática contém números.
+   * @param glc - gramática a ser verificada.
+   */
+  public static boolean contemNumeros(Map<String, List<String>> glc) {
+    for (Map.Entry<String, List<String>> entry : glc.entrySet()) {
+      String naoTerminal = entry.getKey();
+
+      if(naoTerminal.matches((".*\\d.*"))) {
+        return true;
+      }
+    }
+
+    return false;
+  }
 }

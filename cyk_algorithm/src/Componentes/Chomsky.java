@@ -35,11 +35,13 @@ public class Chomsky {
     Gramatica.imprimirGramatica(copiaMap);
 
     System.out.println("\nGramatica convertendo terminais: \n");
-    copiaMap = FromaNormalChomsky.converterTerminais(copiaMap);
+    copiaMap = ConverterTerminais.converterTerminais(copiaMap);
     Gramatica.imprimirGramatica(copiaMap);
 
-    // System.out.println("\nGramatica em CNF: \n");
-    // copiaMap = FormaNormalChomsky.convertToCNF(copiaMap);
-    // Gramatica.imprimirGramatica(copiaMap);
+    System.out.println(Gramatica.isValidChomsky("NAA"));
+
+    System.out.println("\nGramatica em CNF: \n");
+    copiaMap = FormaNormalChomsky.convertToCNF(copiaMap);
+    Gramatica.imprimirGramatica(copiaMap);
   }
 }
