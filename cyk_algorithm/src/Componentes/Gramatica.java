@@ -151,7 +151,7 @@ public class Gramatica {
       List<String> regrasCopy = new ArrayList<>(regras);
 
       for (String regra : regrasCopy) {
-        regra.replaceAll("[A-Z]", "");
+        regra = regra.replaceAll("[A-Z]", "");
         for(int i = 0; i < regra.length(); i++) {
           char caractere = regra.charAt(i);
 

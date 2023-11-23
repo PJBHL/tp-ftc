@@ -1,5 +1,5 @@
 import Componentes.*;
-import Componentes.CNF.FormaNormalChomsky;
+import Componentes.CNF.chom;
 
 public class App {
   public static void main(String[] args) throws Exception {
