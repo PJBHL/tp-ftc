@@ -6,7 +6,7 @@ import Componentes.Gramatica;
 
 /**
  * Classe para o segundo passo da gramática de chomsky:
- * Remover Transições Unitárias. Exemplo:
+ * Remover regras inúteis. Exemplo:
  * 
  * Suponha que uma gramática recebida do primeiro passo (Remoção de Transições
  * Vazias), esteja da seguinte forma:
@@ -29,33 +29,35 @@ import Componentes.Gramatica;
  * A -> aA | a | cC | c
  * B -> bB | b
  * C -> cC | c
+ * 
+ * Como também regras inúteis devem ser removidas, isto é,
+ * regras que geram a si próprio, regras que entram em loop, etc.
  */
-public class RemoverTransicoesUnitarias {
-  public static Map<String, List<String>> removerUnitarios(Map<String, List<String>> glc) {
-    // Map<String, List<String>> glcCopy = removerRegrasInuteis(glc);
+public class RemoverTransicoesInuteis {
+  public static Map<String, List<String>> removerInuteis(Map<String, List<String>> glc) {
     Map<String, List<String>> glcCopy = Gramatica.clonarGramatica(glc);
     List<String> transicoesUnitarias = pegarTransicoesUnitarias(glcCopy);
     while (!transicoesUnitarias.isEmpty()) {
       glcCopy = removendoTransicoesUnitarias(transicoesUnitarias, glcCopy);
       transicoesUnitarias = pegarTransicoesUnitarias(glcCopy);
     }
-    System.out.println("\n\nRemoverUnitarios");
-    Gramatica.imprimirGramatica(glcCopy);
+    
     glcCopy = removerRegraQueGeramElasMesmas(glcCopy);
-    System.out.println("\n\nremoverRegraQueGeramElasMesmas");
-    Gramatica.imprimirGramatica(glcCopy);
     glcCopy = removerRegrasSoltas(glcCopy);
-    System.out.println("\n\nremoverRegrasSoltas");
-    Gramatica.imprimirGramatica(glcCopy);
     glcCopy = removerRegraRepetida(glcCopy);
-    System.out.println("\n\nremoverRegraRepetida");
-    Gramatica.imprimirGramatica(glcCopy);
     glcCopy = removerLoop(glcCopy);
-    System.out.println("\n\nremoverLoop");
 
     return glcCopy;
   }
 
+  /**
+   * Método para trocar elementos de uma dada gramática.
+   * 
+   * @param glc     - gramática para troca de leemntos.
+   * @param remover - elemento que será removido.
+   * @param trocar  - elemento que será adicionado no lugar do antigo.
+   * @return
+   */
   public static Map<String, List<String>> trocarElementosGLC(Map<String, List<String>> glc, String remover,
       String trocar) {
 
@@ -73,28 +75,21 @@ public class RemoverTransicoesUnitarias {
       }
 
     }
-
     return glc;
-
   }
 
-  // /**
-  // * Remoção possíveis regras inúteis da gramática, geradas na derivação.
-  // Exemplo:
-  // * S -> A | S
-  // * (S gerando ele mesmo).
-  // *
-  // * @param glc - gramática para remover as regras.
-  // * @return - nova gramática com regras inúteis removidas.
-  // */
-  // public static Map<String, List<String>> removerRegrasInuteis(Map<String,
-  // List<String>> glc) {
-  // Map<String, List<String>> glcCopy = Gramatica.clonarGramatica(glc);
-
-  // return glcCopy;
-
-  // }
-
+  /**
+   * Método para remover regras soltas na gramática, como no exemplo abaixo:
+   * 
+   * S -> Aa
+   * A -> a
+   * D -> b
+   * 
+   * O D nunca é alcançado pelo S.
+   * 
+   * @param glc
+   * @return
+   */
   public static Map<String, List<String>> removerRegrasSoltas(Map<String, List<String>> glc) {
     Map<String, List<String>> glcCopy = Gramatica.clonarGramatica(glc);
 
@@ -102,7 +97,6 @@ public class RemoverTransicoesUnitarias {
     nao_terminais.add("S");
 
     for (Map.Entry<String, List<String>> each : glc.entrySet()) {
-      // String naoTerminal = each.getKey();
       List<String> regras = each.getValue();
 
       for (String each_regra : regras) {
@@ -129,10 +123,16 @@ public class RemoverTransicoesUnitarias {
       }
 
     }
-
     return glcCopy;
   }
 
+  /**
+   * Método para remover regras como S -> aA | S
+   * S gerando ele mesmo.
+   * 
+   * @param glc
+   * @return
+   */
   public static Map<String, List<String>> removerRegraQueGeramElasMesmas(Map<String, List<String>> glc) {
 
     Map<String, List<String>> glcCopy = Gramatica.clonarGramatica(glc);
@@ -149,6 +149,15 @@ public class RemoverTransicoesUnitarias {
     return glcCopy;
   }
 
+  /**
+   * Método para remover regras repetidas, como:
+   * S -> aA | BB | Bc
+   * B -> bb | BC
+   * C -> bb | BC
+   * 
+   * @param glcCopy
+   * @return
+   */
   public static Map<String, List<String>> removerRegraRepetida(Map<String, List<String>> glcCopy) {
     Iterator<Map.Entry<String, List<String>>> iterator = glcCopy.entrySet().iterator();
     while (iterator.hasNext()) {
@@ -172,6 +181,13 @@ public class RemoverTransicoesUnitarias {
     return glcCopy;
   }
 
+  /**
+   * Método para remover regras que entram em loop, isto é, não possuem um
+   * terminal isolado.
+   * 
+   * @param glcCopy
+   * @return
+   */
   public static Map<String, List<String>> removerLoop(Map<String, List<String>> glcCopy) {
     Iterator<Map.Entry<String, List<String>>> it = glcCopy.entrySet().iterator();
     while (it.hasNext()) {
@@ -210,7 +226,6 @@ public class RemoverTransicoesUnitarias {
       }
 
     }
-
     return glcCopy;
   }
 
@@ -225,7 +240,6 @@ public class RemoverTransicoesUnitarias {
     List<String> transicoesUnitarias = new ArrayList<>();
 
     for (Map.Entry<String, List<String>> each : gramatica.entrySet()) {
-      // String naoTerminal = each.getKey();
       List<String> regras = each.getValue();
 
       for (String regra : regras) {
@@ -281,7 +295,6 @@ public class RemoverTransicoesUnitarias {
         }
       }
     }
-
     return novaGramatica;
   }
 }

@@ -3,6 +3,10 @@ package Componentes.CNF;
 import Componentes.Gramatica;
 import java.util.*;
 
+/**
+ * Primeiro passo do forma de chomsky:
+ * Remover as transições vazias e adicionar as regras necessárias.
+ */
 public class RemoverTransicoesVazias {
   /**
    * Método para pegar os Não Terminais com as transições vazias, diretos e
@@ -105,7 +109,6 @@ public class RemoverTransicoesVazias {
       copiaMapTransicoes.put("S", regras_cpy);
 
     }
-
     return copiaMapTransicoes;
   }
 }

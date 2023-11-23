@@ -3,6 +3,11 @@ package Componentes;
 import java.io.*;
 import java.util.*;
 
+/**
+ * Classe para tratar leitura de uma gramática.
+ * Uma gramática é um Map de String (não terminal) e um conjunto de regras na
+ * forma de List<String>
+ */
 public class Gramatica {
   public Map<String, List<String>> gramaticaLida;
 
@@ -40,7 +45,7 @@ public class Gramatica {
   }
 
   /**
-   * Este método CONSTRUTOR.
+   * Método construtor para leitura do arquivo contendo a gramática.
    * 
    * @param path Caminho do arquivo de texto.
    */
@@ -97,6 +102,27 @@ public class Gramatica {
     return gramatica;
   }
 
+  /**
+   * Método para imprimir o conjunto de regras da gramática.
+   * 
+   * @param regras
+   */
+  private static void imprimirConjuntoDeRegras(List<String> regras) {
+    System.out.print("{");
+    for (int i = 0; i < regras.size(); i++) {
+      System.out.print(regras.get(i));
+      if (i < regras.size() - 1) {
+        System.out.print(" | ");
+      }
+    }
+    System.out.println("}");
+  }
+
+  /**
+   * Método para imprimir determinada gramática para testes.
+   * 
+   * @param gramatica
+   */
   public static void imprimirGramatica(Map<String, List<String>> gramatica) {
     Set<String> naoTerminaisImprimidos = new HashSet<>();
 
@@ -112,17 +138,13 @@ public class Gramatica {
     }
   }
 
-  private static void imprimirConjuntoDeRegras(List<String> regras) {
-    System.out.print("{");
-    for (int i = 0; i < regras.size(); i++) {
-      System.out.print(regras.get(i));
-      if (i < regras.size() - 1) {
-        System.out.print(" | ");
-      }
-    }
-    System.out.println("}");
-  }
-
+  /**
+   * Método para clonar uma gramática. Útil para operações em que não se pode
+   * modificar a referência original.
+   * 
+   * @param target - gramática a ser clonada.
+   * @return - uma nova gramática identica ao target.
+   */
   public static Map<String, List<String>> clonarGramatica(Map<String, List<String>> target) {
     Map<String, List<String>> clone = new LinkedHashMap<>();
 
@@ -135,6 +157,12 @@ public class Gramatica {
     return clone;
   }
 
+  /**
+   * Método para pegar todos os não terminais que formam regras na gramática.
+   * 
+   * @param glc
+   * @return - lista contendo os não terminais.
+   */
   public static List<String> pegarNaoTerminais(Map<String, List<String>> glc) {
     List<String> naoTerminais = new ArrayList<>();
     for (Map.Entry<String, List<String>> entry : glc.entrySet()) {
@@ -144,6 +172,12 @@ public class Gramatica {
     return naoTerminais;
   }
 
+  /**
+   * Método para pegar todos os terminais da gramática (letras minusculas).
+   * 
+   * @param glc
+   * @return - Lista sem elementos repetidos, contendo todos os terminais.
+   */
   public static List<String> pegarTerminais(Map<String, List<String>> glc) {
     List<String> terminais = new ArrayList<>();
     for (Map.Entry<String, List<String>> entry : glc.entrySet()) {
@@ -152,16 +186,15 @@ public class Gramatica {
 
       for (String regra : regrasCopy) {
         regra = regra.replaceAll("[A-Z]", "");
-        for(int i = 0; i < regra.length(); i++) {
+        for (int i = 0; i < regra.length(); i++) {
           char caractere = regra.charAt(i);
 
-          if(!terminais.contains(String.valueOf(caractere))) {
+          if (!terminais.contains(String.valueOf(caractere))) {
             terminais.add(String.valueOf(caractere));
           }
         }
       }
     }
-    
     return terminais;
   }
 }

@@ -4,7 +4,7 @@ import java.util.*;
 
 import Componentes.Gramatica;
 
-public class chom {
+public class FromaNormalChomsky {
 
   /**
    * Método para verificar a quantidade de letras maiusculas em determinada regra.

@@ -4,6 +4,12 @@ import Componentes.CNF.*;
 
 import java.util.*;
 
+/**
+ * Classe para fazer a conversão de uma GLC qualquer para uma no formato de
+ * Chomsky.
+ * Input é uma glc qualquer.
+ * Output é uma glc na forma de chomsky.
+ */
 public class Chomsky {
   /**
    * Construtor do método de Chomsky.
@@ -24,12 +30,12 @@ public class Chomsky {
     copiaMap = RemoverTransicoesVazias.eliminarProducoesVazias(this.glc);
     Gramatica.imprimirGramatica(copiaMap);
 
-    System.out.println("\nGramatica tirando Unitários: \n");
-    copiaMap = RemoverTransicoesUnitarias.removerUnitarios(copiaMap);
+    System.out.println("\nGramatica tirando regras Inúteis: \n");
+    copiaMap = RemoverTransicoesInuteis.removerInuteis(copiaMap);
     Gramatica.imprimirGramatica(copiaMap);
 
-    System.out.println("\nConvertendo Terminais: \n");
-    copiaMap = chom.converterTerminais(copiaMap);
+    System.out.println("\nGramatica convertendo terminais: \n");
+    copiaMap = FromaNormalChomsky.converterTerminais(copiaMap);
     Gramatica.imprimirGramatica(copiaMap);
 
     // System.out.println("\nGramatica em CNF: \n");
