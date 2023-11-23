@@ -32,35 +32,71 @@ import Componentes.Gramatica;
  */
 public class RemoverTransicoesUnitarias {
   public static Map<String, List<String>> removerUnitarios(Map<String, List<String>> glc) {
-    Map<String, List<String>> glcCopy = removerRegrasInuteis(glc);
+    // Map<String, List<String>> glcCopy = removerRegrasInuteis(glc);
+    Map<String, List<String>> glcCopy = Gramatica.clonarGramatica(glc);
     List<String> transicoesUnitarias = pegarTransicoesUnitarias(glcCopy);
     while (!transicoesUnitarias.isEmpty()) {
       glcCopy = removendoTransicoesUnitarias(transicoesUnitarias, glcCopy);
       transicoesUnitarias = pegarTransicoesUnitarias(glcCopy);
     }
+    System.out.println("\n\nRemoverUnitarios");
+    Gramatica.imprimirGramatica(glcCopy);
+    glcCopy = removerRegraQueGeramElasMesmas(glcCopy);
+    System.out.println("\n\nremoverRegraQueGeramElasMesmas");
+    Gramatica.imprimirGramatica(glcCopy);
+    glcCopy = removerRegrasSoltas(glcCopy);
+    System.out.println("\n\nremoverRegrasSoltas");
+    Gramatica.imprimirGramatica(glcCopy);
+    glcCopy = removerRegraRepetida(glcCopy);
+    System.out.println("\n\nremoverRegraRepetida");
+    Gramatica.imprimirGramatica(glcCopy);
+    glcCopy = removerLoop(glcCopy);
+    System.out.println("\n\nremoverLoop");
 
     return glcCopy;
   }
 
-  /**
-   * Remoção possíveis regras inúteis da gramática, geradas na derivação. Exemplo:
-   * S -> A | S
-   * (S gerando ele mesmo).
-   * 
-   * @param glc - gramática para remover as regras.
-   * @return - nova gramática com regras inúteis removidas.
-   */
-  public static Map<String, List<String>> removerRegrasInuteis(Map<String, List<String>> glc) {
-    Map<String, List<String>> glcCopy = Gramatica.clonarGramatica(glc);
+  public static Map<String, List<String>> trocarElementosGLC(Map<String, List<String>> glc, String remover,
+      String trocar) {
 
-    // Removendo Regras que geram elas mesmas.
     for (Map.Entry<String, List<String>> each : glc.entrySet()) {
-      String naoTerminal = each.getKey();
       List<String> regras = each.getValue();
 
-      if (regras.contains(naoTerminal))
-        glcCopy.get(naoTerminal).remove(naoTerminal);
+      for (String each_regra : regras) {
+
+        if (each_regra.contains(remover)) {
+          String replaca = each_regra.replace(remover, trocar);
+          int indice = regras.indexOf(each_regra);
+          regras.set(indice, replaca);
+          "".toString();
+        }
+      }
+
     }
+
+    return glc;
+
+  }
+
+  // /**
+  // * Remoção possíveis regras inúteis da gramática, geradas na derivação.
+  // Exemplo:
+  // * S -> A | S
+  // * (S gerando ele mesmo).
+  // *
+  // * @param glc - gramática para remover as regras.
+  // * @return - nova gramática com regras inúteis removidas.
+  // */
+  // public static Map<String, List<String>> removerRegrasInuteis(Map<String,
+  // List<String>> glc) {
+  // Map<String, List<String>> glcCopy = Gramatica.clonarGramatica(glc);
+
+  // return glcCopy;
+
+  // }
+
+  public static Map<String, List<String>> removerRegrasSoltas(Map<String, List<String>> glc) {
+    Map<String, List<String>> glcCopy = Gramatica.clonarGramatica(glc);
 
     List<String> nao_terminais = new ArrayList<>();
     nao_terminais.add("S");
@@ -94,8 +130,86 @@ public class RemoverTransicoesUnitarias {
 
     }
 
-    // Ainda é necessário remover regras que não são alcançáveis.
-    // Ou então regras ambiguas.
+    return glcCopy;
+  }
+
+  public static Map<String, List<String>> removerRegraQueGeramElasMesmas(Map<String, List<String>> glc) {
+
+    Map<String, List<String>> glcCopy = Gramatica.clonarGramatica(glc);
+
+    // Removendo Regras que geram elas mesmas.
+    for (Map.Entry<String, List<String>> each : glc.entrySet()) {
+      String naoTerminal = each.getKey();
+      List<String> regras = each.getValue();
+
+      if (regras.contains(naoTerminal))
+        glcCopy.get(naoTerminal).remove(naoTerminal);
+    }
+
+    return glcCopy;
+  }
+
+  public static Map<String, List<String>> removerRegraRepetida(Map<String, List<String>> glcCopy) {
+    Iterator<Map.Entry<String, List<String>>> iterator = glcCopy.entrySet().iterator();
+    while (iterator.hasNext()) {
+      Map.Entry<String, List<String>> entry = iterator.next();
+      String naoTerminal = entry.getKey();
+      List<String> regras = entry.getValue();
+
+      Iterator<Map.Entry<String, List<String>>> iterator2 = glcCopy.entrySet().iterator();
+      while (iterator2.hasNext()) {
+        Map.Entry<String, List<String>> entry2 = iterator2.next();
+        List<String> regras2 = entry2.getValue();
+        String naoTerminal_dois = entry2.getKey();
+
+        if (regras.equals(regras2) && !naoTerminal.equals(naoTerminal_dois)) {
+          iterator.remove();
+          glcCopy = trocarElementosGLC(glcCopy, naoTerminal, naoTerminal_dois);
+        }
+      }
+    }
+
+    return glcCopy;
+  }
+
+  public static Map<String, List<String>> removerLoop(Map<String, List<String>> glcCopy) {
+    Iterator<Map.Entry<String, List<String>>> it = glcCopy.entrySet().iterator();
+    while (it.hasNext()) {
+      Map.Entry<String, List<String>> entry = it.next();
+      String naoTerminal = entry.getKey();
+      List<String> regras = entry.getValue();
+
+      boolean isValidToExclu = false;
+
+      for (String kd_regra : regras) {
+
+        if (kd_regra.contains(naoTerminal)) {
+          isValidToExclu = true;
+        } else {
+          isValidToExclu = false;
+          break;
+        }
+      }
+
+      if (isValidToExclu) {
+        glcCopy.remove(naoTerminal);
+
+        Iterator<Map.Entry<String, List<String>>> it3 = glcCopy.entrySet().iterator();
+        while (it3.hasNext()) {
+          Map.Entry<String, List<String>> entry3 = it3.next();
+          List<String> regras3 = entry3.getValue();
+
+          List<String> cloneList = new ArrayList<>(regras3);
+          for (String each_regra : cloneList) {
+            if (each_regra.contains(naoTerminal)) {
+              regras3.remove(each_regra);
+            }
+          }
+
+        }
+      }
+
+    }
 
     return glcCopy;
   }
