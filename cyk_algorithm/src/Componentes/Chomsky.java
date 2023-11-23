@@ -24,12 +24,12 @@ public class Chomsky {
     copiaMap = RemoverTransicoesVazias.eliminarProducoesVazias(this.glc);
     Gramatica.imprimirGramatica(copiaMap);
 
-    System.out.println("\nGramatica tirando Unitários: \n");
+    // System.out.println("\nGramatica tirando Unitários: \n");
     copiaMap = RemoverTransicoesUnitarias.removerUnitarios(copiaMap);
     Gramatica.imprimirGramatica(copiaMap);
 
-    System.out.println("\nGramatica em CNF: \n");
-    copiaMap = FormaNormalChomsky.convertToCNF(copiaMap);
-    Gramatica.imprimirGramatica(copiaMap);
+    // System.out.println("\nGramatica em CNF: \n");
+    // copiaMap = FormaNormalChomsky.convertToCNF(copiaMap);
+    // Gramatica.imprimirGramatica(copiaMap);
   }
 }

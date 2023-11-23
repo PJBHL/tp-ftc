@@ -134,4 +134,34 @@ public class Gramatica {
 
     return clone;
   }
+
+  public static List<String> pegarNaoTerminais(Map<String, List<String>> glc) {
+    List<String> naoTerminais = new ArrayList<>();
+    for (Map.Entry<String, List<String>> entry : glc.entrySet()) {
+      naoTerminais.add(entry.getKey());
+    }
+
+    return naoTerminais;
+  }
+
+  public static List<String> pegarTerminais(Map<String, List<String>> glc) {
+    List<String> terminais = new ArrayList<>();
+    for (Map.Entry<String, List<String>> entry : glc.entrySet()) {
+      List<String> regras = entry.getValue();
+      List<String> regrasCopy = new ArrayList<>(regras);
+
+      for (String regra : regrasCopy) {
+        regra.replaceAll("[A-Z]", "");
+        for(int i = 0; i < regra.length(); i++) {
+          char caractere = regra.charAt(i);
+
+          if(!terminais.contains(String.valueOf(caractere))) {
+            terminais.add(String.valueOf(caractere));
+          }
+        }
+      }
+    }
+    
+    return terminais;
+  }
 }
