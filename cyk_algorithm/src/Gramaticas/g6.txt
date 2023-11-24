@@ -1,4 +1,4 @@
-S -> aA | aBB
+S -> aAAA | aBB
 A -> aAA | !
 B -> bB | bbC
 C -> B
