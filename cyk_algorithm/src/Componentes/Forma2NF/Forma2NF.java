@@ -1,12 +1,8 @@
 package Componentes.Forma2NF;
 
-import java.util.List;
-import java.util.Map;
-
-import Componentes.Gramatica;
-import Componentes.CNF.ConverterNaoTerminais;
-import Componentes.CNF.ConverterTerminais;
-import Componentes.CNF.RemoverTransicoesInuteis;
+import java.util.*;
+import Componentes.*;
+import Componentes.CNF.*;
 
 public class Forma2NF {
     public static void main(String[] args) throws Exception {
@@ -22,10 +18,15 @@ public class Forma2NF {
         System.out.println("\nGramatica tirando os inuteis: \n");
         copiaMap = removerInuteis(copiaMap);
         Gramatica.imprimirGramatica(copiaMap);
+        
+        // System.out.println("\nGramatica binarizada: \n");
+        // copiaMap = ConverterNaoTerminais.converterNaoTerminais(copiaMap);
+        // Gramatica.imprimirGramatica(copiaMap);
 
-        System.out.println("\nGramatica binarizada: \n");
-        copiaMap = ConverterNaoTerminais.converterNaoTerminais(copiaMap);
-        Gramatica.imprimirGramatica(copiaMap);
+        // // Removendo possíveis inuteis da gramática.
+        // System.out.println("\nGramatica tirando os inuteis: \n");
+        // copiaMap = removerInuteis(copiaMap);
+        // Gramatica.imprimirGramatica(copiaMap);
     }
 
     public static Map<String, List<String>> removerInuteis(Map<String, List<String>> glc) {

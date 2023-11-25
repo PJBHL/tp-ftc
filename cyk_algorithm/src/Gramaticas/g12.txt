@@ -1,0 +1,7 @@
+E -> T | EI0
+T -> F | TC
+F -> aI | bI | (A
+I -> cI | dI | !
+A -> E)
+C -> *F
+I0 -> +T

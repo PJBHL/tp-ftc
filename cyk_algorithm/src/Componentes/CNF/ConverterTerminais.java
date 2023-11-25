@@ -16,28 +16,41 @@ import Componentes.Gramatica;
  */
 public class ConverterTerminais {
 
+  /**
+   * Método para gerar letras maiusculas aleatórias.
+   * Caso ela exista, adicionar um numero a letra.
+   * 
+   * @param naoTerminais
+   * @return
+   */
   public static String gerarLetraMaiusculaAleatoria(List<String> naoTerminais) {
     Random random = new Random();
     char letra = (char) (random.nextInt(26) + 'A');
     String letraString = String.valueOf(letra);
 
     int i = 0;
-    if(!naoTerminais.contains(letraString)) {
+    if (!naoTerminais.contains(letraString)) {
       return letraString;
     }
-    
-    while(true) {
+
+    while (true) {
       letraString = String.valueOf(letra);
       letraString += String.valueOf(i);
-      if(!naoTerminais.contains(letraString)) {
+      if (!naoTerminais.contains(letraString)) {
         break;
       }
       i++;
     }
 
     return letraString;
-}
+  }
 
+  /**
+   * Metodo para converter os terminais em novos não terminais.
+   * 
+   * @param glc
+   * @return
+   */
   public static Map<String, List<String>> converterTerminais(Map<String, List<String>> glc) {
     Map<String, List<String>> glcopy = Gramatica.clonarGramatica(glc);
     List<String> terminais = Gramatica.pegarTerminais(glcopy);
@@ -50,9 +63,9 @@ public class ConverterTerminais {
       for (Map.Entry<String, List<String>> each : glc.entrySet()) {
         String naoTerminal = each.getKey();
         List<String> regras = each.getValue();
-        
+
         List<String> regrasCopy = new ArrayList<>(regras);
-        
+
         for (String regra : regrasCopy) {
           for (int i = 0; i < regra.length(); i++) {
             char letraAtual = regra.charAt(i);

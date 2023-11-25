@@ -95,8 +95,8 @@ public class ConverterNaoTerminais {
 
         // Enquanto o vetor 'splitResultado' não tiver tamanho igual a dois, há
         // operações para fazer na string.
-        for (int i = 0, contador = 1; splitResultado.size() != 2; i++, contador++) {
-            String letra = splitResultado.get(i) + splitResultado.get(i + 1);
+        for (int i = splitResultado.size() - 1; splitResultado.size() != 2; i--) {
+            String letra = splitResultado.get(i - 1) + splitResultado.get(i);
             String substituicao = substituicoes.get(letra);
             substituicao = substituirDupla(letra, naoTerminais);
             if (!naoTerminais.contains(substituicao)) {
@@ -106,7 +106,6 @@ public class ConverterNaoTerminais {
             } else {
                 resultado = resultado.replace(letra, substituicao);
             }
-            i--;
 
             splitResultado = dividirString(resultado);
         }
