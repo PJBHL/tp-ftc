@@ -106,14 +106,15 @@ public class Gramatica {
    * @param regras
    */
   private static void imprimirConjuntoDeRegras(List<String> regras) {
-    System.out.print("{");
+    // System.out.print("{");
     for (int i = 0; i < regras.size(); i++) {
       System.out.print(regras.get(i));
       if (i < regras.size() - 1) {
         System.out.print(" | ");
       }
     }
-    System.out.println("}");
+    System.out.println();
+    // System.out.println("}");
   }
 
   /**

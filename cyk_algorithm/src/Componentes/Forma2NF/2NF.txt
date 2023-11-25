@@ -1,0 +1,13 @@
+S -> aA | aBB
+A -> aAA | !
+B -> bB | bbC
+C -> B
+
+2NF:
+
+S -> aA | A1B
+A -> A2A | !
+B -> bB | B1C
+A1 -> aB
+A2 -> aA
+B1 -> bb

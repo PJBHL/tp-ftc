@@ -40,8 +40,8 @@ public class ConverterNaoTerminais {
         }
 
         // Adicionar as substituições ao glc
-        for (Map.Entry<String, String> entry : substituicoes.entrySet()) {
-            glc.put(entry.getKey(), List.of(entry.getValue()));
+        for (Map.Entry<String, String> each : substituicoes.entrySet()) {
+            glc.put(each.getKey(), List.of(each.getValue()));
         }
 
         return glc;
@@ -65,7 +65,7 @@ public class ConverterNaoTerminais {
         String regra = String.valueOf(input.charAt(0));
 
         for (int i = 1; i < input.length(); i++) {
-            if (Character.isUpperCase(input.charAt(i))) {
+            if (!Character.isDigit(input.charAt(i))) {
                 newArray.add(regra);
                 regra = String.valueOf(input.charAt(i));
             } else {
@@ -98,7 +98,7 @@ public class ConverterNaoTerminais {
         for (int i = 0, contador = 1; splitResultado.size() != 2; i++, contador++) {
             String letra = splitResultado.get(i) + splitResultado.get(i + 1);
             String substituicao = substituicoes.get(letra);
-            substituicao = substituirDupla(letra, contador);
+            substituicao = substituirDupla(letra, naoTerminais);
             if (!naoTerminais.contains(substituicao)) {
                 naoTerminais.add(substituicao);
                 substituicoes.put(substituicao, letra);
@@ -116,11 +116,13 @@ public class ConverterNaoTerminais {
 
     /**
      * Método para substitur uma string pela primeira letra + número do parametro.
-     * @param dupla - string para pegar a primeira letra.
+     * 
+     * @param dupla    - string para pegar a primeira letra.
      * @param contador - contador para concatenar com a string
      * @return - uma string no formato uma letra maiuscula e um número.
      */
-    public static String substituirDupla(String dupla, int contador) {
-        return dupla.substring(0, 1) + String.valueOf(contador);
+    public static String substituirDupla(String dupla, List<String> naoTerminais) {
+        String letraRandom = ConverterTerminais.gerarLetraMaiusculaAleatoria(naoTerminais);
+        return letraRandom;
     }
 }

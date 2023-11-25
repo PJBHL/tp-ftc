@@ -16,16 +16,22 @@ import Componentes.Gramatica;
  */
 public class ConverterTerminais {
 
-  private static char gerarLetraMaiusculaAleatoria(List<String> naoTerminais) {
+  public static String gerarLetraMaiusculaAleatoria(List<String> naoTerminais) {
     Random random = new Random();
-    char letra;
+    char letra = (char) (random.nextInt(26) + 'A');
+    String letraString;
 
-    do {
-        // Gera uma letra aleatória maiúscula
-        letra = (char) (random.nextInt(26) + 'A');
-    } while (naoTerminais.contains(String.valueOf(letra)));
+    int i = 0;
+    while(true) {
+      letraString = String.valueOf(letra);
+      letraString += String.valueOf(i);
+      if(!naoTerminais.contains(letraString)) {
+        break;
+      }
+      i++;
+    }
 
-    return letra;
+    return letraString;
 }
 
   public static Map<String, List<String>> converterTerminais(Map<String, List<String>> glc) {
@@ -33,22 +39,24 @@ public class ConverterTerminais {
     List<String> terminais = Gramatica.pegarTerminais(glcopy);
     List<String> naoTerminais = Gramatica.pegarNaoTerminais(glcopy);
     List<String> regrasAdd = new ArrayList<>();
+    String letraRandom = "";
 
     for (String terminal : terminais) {
-      char letraRandom = gerarLetraMaiusculaAleatoria(naoTerminais);
+      letraRandom = gerarLetraMaiusculaAleatoria(naoTerminais);
       for (Map.Entry<String, List<String>> each : glc.entrySet()) {
         String naoTerminal = each.getKey();
         List<String> regras = each.getValue();
-
+        
         List<String> regrasCopy = new ArrayList<>(regras);
-
+        
         for (String regra : regrasCopy) {
           for (int i = 0; i < regra.length(); i++) {
             char letraAtual = regra.charAt(i);
             if (String.valueOf(letraAtual).equals(terminal) && regra.length() >= 2) {
-              String newRule = regra.replace(letraAtual, letraRandom);
+              String newRule = regra.replace(String.valueOf(letraAtual), letraRandom);
               glcopy.get(naoTerminal).add(regras.indexOf(regra), newRule);
               glcopy.get(naoTerminal).remove(regra);
+              naoTerminais.add(letraRandom);
               i = regra.length();
             }
           }
@@ -56,7 +64,7 @@ public class ConverterTerminais {
       }
       if (!regrasAdd.contains(terminal))
         regrasAdd.add(terminal);
-      glcopy.put(String.valueOf(letraRandom), new ArrayList<>(regrasAdd));
+      glcopy.put(letraRandom, new ArrayList<>(regrasAdd));
       regrasAdd.clear();
     }
     return glcopy;
