@@ -19,9 +19,13 @@ public class ConverterTerminais {
   public static String gerarLetraMaiusculaAleatoria(List<String> naoTerminais) {
     Random random = new Random();
     char letra = (char) (random.nextInt(26) + 'A');
-    String letraString;
+    String letraString = String.valueOf(letra);
 
     int i = 0;
+    if(!naoTerminais.contains(letraString)) {
+      return letraString;
+    }
+    
     while(true) {
       letraString = String.valueOf(letra);
       letraString += String.valueOf(i);
