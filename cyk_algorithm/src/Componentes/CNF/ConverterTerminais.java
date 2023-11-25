@@ -4,22 +4,38 @@ import java.util.*;
 
 import Componentes.Gramatica;
 
+/**
+ * Classe para converter os terminais da gramática em novos não terminais
+ * e adicionar uma regra para isso. Exemplo:
+ * S -> a
+ * Gera uma letra aleatória para "a".
+ * S -> M.
+ * M agora deve gerar "a".
+ * S -> M
+ * M -> a
+ */
 public class ConverterTerminais {
-    private static char gerarLetraMaiusculaAleatoria() {
+
+  private static char gerarLetraMaiusculaAleatoria(List<String> naoTerminais) {
     Random random = new Random();
-    // A tabela ASCII para letras maiúsculas está no intervalo de 65 ('A') a 90
-    // ('Z')
-    int indice = random.nextInt(26) + 65;
-    return (char) indice;
-  }
+    char letra;
+
+    do {
+        // Gera uma letra aleatória maiúscula
+        letra = (char) (random.nextInt(26) + 'A');
+    } while (naoTerminais.contains(String.valueOf(letra)));
+
+    return letra;
+}
 
   public static Map<String, List<String>> converterTerminais(Map<String, List<String>> glc) {
     Map<String, List<String>> glcopy = Gramatica.clonarGramatica(glc);
     List<String> terminais = Gramatica.pegarTerminais(glcopy);
+    List<String> naoTerminais = Gramatica.pegarNaoTerminais(glcopy);
     List<String> regrasAdd = new ArrayList<>();
 
     for (String terminal : terminais) {
-      char letraRandom = gerarLetraMaiusculaAleatoria();
+      char letraRandom = gerarLetraMaiusculaAleatoria(naoTerminais);
       for (Map.Entry<String, List<String>> each : glc.entrySet()) {
         String naoTerminal = each.getKey();
         List<String> regras = each.getValue();
@@ -30,17 +46,10 @@ public class ConverterTerminais {
           for (int i = 0; i < regra.length(); i++) {
             char letraAtual = regra.charAt(i);
             if (String.valueOf(letraAtual).equals(terminal) && regra.length() >= 2) {
-              String newRule = "";
-              if (!glcopy.containsKey(String.valueOf(letraRandom))) {
-                newRule = regra.replace(letraAtual, letraRandom);
-                i = regra.length();
-              } else {
-                String number = Character.toUpperCase(letraAtual) + "1";
-                newRule = regra.replace(String.valueOf(letraAtual), number);
-                i = regra.length();
-              }
+              String newRule = regra.replace(letraAtual, letraRandom);
               glcopy.get(naoTerminal).add(regras.indexOf(regra), newRule);
               glcopy.get(naoTerminal).remove(regra);
+              i = regra.length();
             }
           }
         }

@@ -93,9 +93,7 @@ public class Gramatica {
           regrasList.add(regra.trim());
 
         gramatica.put(naoTerminal, regrasList);
-
       }
-
     }
 
     br.close();

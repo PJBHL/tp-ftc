@@ -4,53 +4,60 @@ import java.util.*;
 
 import Componentes.Gramatica;
 
+/**
+ * Classe para o último passo da Forma Normal de Chomsky. Converter os não
+ * terminais remanecentes
+ * gerando apenas duplas de não terminais ou um terminal.
+ */
 public class ConverterNaoTerminais {
-    public static void converterNaoTerminais(Map<String, List<String>> mapa) {
+    /**
+     * Método para fazer a conversão em si. Exemplo de entrada e saída:
+     * Entrada:
+     * S -> YA | a
+     * A -> YAA | a
+     * 
+     * Saída:
+     * S -> YA | a
+     * A -> Y1A | a
+     * Y1 -> YA
+     * 
+     * @param glc
+     */
+    public static Map<String, List<String>> converterNaoTerminais(Map<String, List<String>> glc) {
         Map<String, String> substituicoes = new HashMap<>();
-        List<String> naoTerminais = Gramatica.pegarNaoTerminais(mapa);
+        List<String> naoTerminais = Gramatica.pegarNaoTerminais(glc);
 
-        for (Map.Entry<String, List<String>> entry : mapa.entrySet()) {
-            String key = entry.getKey();
-            List<String> values = entry.getValue();
+        for (Map.Entry<String, List<String>> entry : glc.entrySet()) {
+            List<String> regras = entry.getValue();
 
-            for (int i = 0; i < values.size(); i++) {
-                String original = values.get(i);
-                if (original.length() > 2) {
-                    String substituido = substituirDuplasMaiusculas(original, substituicoes, naoTerminais);
-                    values.set(i, substituido);
+            for (int i = 0; i < regras.size(); i++) {
+                String regra = regras.get(i);
+                if (regra.length() > 2) {
+                    String substituido = substituirDuplasMaiusculas(regra, substituicoes, naoTerminais);
+                    regras.set(i, substituido);
                 }
             }
         }
 
-        // Adicionar as substituições ao mapa
+        // Adicionar as substituições ao glc
         for (Map.Entry<String, String> entry : substituicoes.entrySet()) {
-            mapa.put(entry.getKey(), List.of(entry.getValue()));
+            glc.put(entry.getKey(), List.of(entry.getValue()));
         }
+
+        return glc;
     }
 
     /**
-     * S -> {JAAAA | JAA | JA | a}
-     * A -> {JAA | JA | a}
-     * G -> {a}
-     * Map<String, String> = J1 -> JA
-     * Map<String, String> = A1 -> AA
-     * 
-     * J1A1A
-     * Map<String, String> A2 -> A1A
-     * A2A
-     * 
-     * S -> {M1AA | M1A | MA | a}
-     * A -> {M1A | MA | a}
-     * U -> {a}
-     * M1 -> MA
-     * 
-     * S -> {J3A | J1A | JA | a}
-     * A -> {J1A | JA | a}
-     * G -> {a}
-     * J1 -> JA
-     * J2 -> J1A
-     * J3 -> J2A
-     * 
+     * Método para dividr uma string em posições de um array.
+     * A trava da divisão é um número. Exemplo de entrada e saída:
+     * Entrada:
+     * CAAA
+     * Saída:
+     * Lista com C A A A
+     * Entrada com número:
+     * C1AA
+     * Saída:
+     * Lista com C1 A A
      */
     public static List<String> dividirString(String input) {
         List<String> newArray = new ArrayList<>();
@@ -71,19 +78,25 @@ public class ConverterNaoTerminais {
         return newArray;
     }
 
+    /**
+     * Método para fazer a substituição de duplas maiusculas para criar um novo não
+     * terminal.
+     * 
+     * @param original      - string original recebida por parametro.
+     * @param substituicoes - lista com substituições que já foram feitas.
+     * @param naoTerminais  - lista de não terminais presentes na gramática.
+     * @return
+     */
     public static String substituirDuplasMaiusculas(String original, Map<String, String> substituicoes,
             List<String> naoTerminais) {
+
         String resultado = original;
-        boolean verificar = false;
-
         List<String> splitResultado = dividirString(resultado);
-        int pos = 1;
 
+        // Enquanto o vetor 'splitResultado' não tiver tamanho igual a dois, há
+        // operações para fazer na string.
         for (int i = 0, contador = 1; splitResultado.size() != 2; i++, contador++) {
             String letra = splitResultado.get(i) + splitResultado.get(i + 1);
-
-            // String substring = letra + splitResultado.get(i + 2);
-            // substring = letra
             String substituicao = substituicoes.get(letra);
             substituicao = substituirDupla(letra, contador);
             if (!naoTerminais.contains(substituicao)) {
@@ -101,6 +114,12 @@ public class ConverterNaoTerminais {
         return resultado;
     }
 
+    /**
+     * Método para substitur uma string pela primeira letra + número do parametro.
+     * @param dupla - string para pegar a primeira letra.
+     * @param contador - contador para concatenar com a string
+     * @return - uma string no formato uma letra maiuscula e um número.
+     */
     public static String substituirDupla(String dupla, int contador) {
         return dupla.substring(0, 1) + String.valueOf(contador);
     }

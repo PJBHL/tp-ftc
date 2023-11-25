@@ -7,7 +7,6 @@ import java.util.regex.*;
  * Classe com a implementação original do algoritmo CYK.
  */
 public class Cyk {
-
   /**
    * Método para excluir nao terminais da lista antes de ser testado
    * 
