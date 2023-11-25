@@ -4,41 +4,9 @@ import java.util.*;
 import java.util.regex.*;
 
 /**
- * G:
- * S -> NP VP
- * VP -> VP PP
- * VP -> V NP
- * VP -> come
- * PP -> P NP
- * NP -> Det N
- * NP -> ela
- * V -> come
- * P -> com
- * N -> peixe
- * N -> garfo
- * Det -> um
- * 
- * w: ela come um peixe com um garfo
+ * Classe com a implementação original do algoritmo CYK.
  */
-
-/**
- * input: a CFG G = (N, Σ, S, ->) in CNF, a word w = a1 . . . an ∈Σ+
- * CYK(G,w) =
- * for i = 1, . . . , n do
- * Ti,i := {A ∈N |A -> ai}
- * for j = 2, . . . , n do
- * for i = j - 1, . . . , 1 do
- * Ti,j := ∅;
- * for h = i, . . . , j - 1 do
- * for all A -> BC
- * if B ∈Ti,h and C ∈Th+1,j then
- * Ti,j := Ti,j ∪ {A}
- * 
- * if S ∈T1,n then return yes else return no
- */
-
 public class Cyk {
-
   /**
    * Método para excluir nao terminais da lista antes de ser testado
    * 
@@ -57,11 +25,13 @@ public class Cyk {
   }
 
   /**
-   * Método para verificar se uma sentença está
+   * Método para verificar se determinada sentença ou palavra tem todos os seus
+   * caracteres presentes no alfabeto da linguagem.
    * 
-   * @param gramatica
-   * @param word
-   * @return
+   * @param gramatica - gramática de parâmetro.
+   * @param word      - palavra ou sentença para verificar o alfabeto.
+   * @return - true se a sentença/palavra pertence ao alfabeto, false caso
+   *         contrário.
    */
   public boolean isInAlphabet(Map<String, List<String>> gramatica, String word) {
 
@@ -97,7 +67,7 @@ public class Cyk {
    * Método do algoritmo original de CYK, para verificar se deteminada
    * palavra pertence a uma gramatica.
    * 
-   * @param gramatica - Gramatica no formato de Chomsky.
+   * @param gramatica - Gramatica já no formato de Chomsky.
    * @param word      - Palavra ou sentença para verificação.
    * @return - true se word pertence a gramatica e false caso contrário.
    */
@@ -108,11 +78,11 @@ public class Cyk {
    * sintaticas.
    * Em resumo T, nos diz se w é uma sentença de G ou não.
    */
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings("unchecked") // Warning ao criar uma new List sem um tipo abstrato.
   public boolean cykAlgorithm(Map<String, List<String>> gramatica, String word) {
     int n = word.length();
 
-    // Tabela T com armazenamento de resultados.
+    // Tabela (ou matriz) T com armazenamento de resultados.
     List<String>[][] tabela = new List[n][n];
 
     // Inicializar tabela.
@@ -156,6 +126,7 @@ public class Cyk {
       }
     }
 
+    // Se a tabela contém o "S" a sentença / palavra testada pertence a gramática.
     return tabela[0][n - 1].contains("S");
   }
 }

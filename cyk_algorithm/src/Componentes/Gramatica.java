@@ -3,6 +3,11 @@ package Componentes;
 import java.io.*;
 import java.util.*;
 
+/**
+ * Classe para tratar leitura de uma gramática.
+ * Uma gramática é um Map de String (não terminal) e um conjunto de regras na
+ * forma de List<String>
+ */
 public class Gramatica {
   public Map<String, List<String>> gramaticaLida;
 
@@ -40,7 +45,7 @@ public class Gramatica {
   }
 
   /**
-   * Este método CONSTRUTOR.
+   * Método construtor para leitura do arquivo contendo a gramática.
    * 
    * @param path Caminho do arquivo de texto.
    */
@@ -88,15 +93,34 @@ public class Gramatica {
           regrasList.add(regra.trim());
 
         gramatica.put(naoTerminal, regrasList);
-
       }
-
     }
 
     br.close();
     return gramatica;
   }
 
+  /**
+   * Método para imprimir o conjunto de regras da gramática.
+   * 
+   * @param regras
+   */
+  private static void imprimirConjuntoDeRegras(List<String> regras) {
+    System.out.print("{");
+    for (int i = 0; i < regras.size(); i++) {
+      System.out.print(regras.get(i));
+      if (i < regras.size() - 1) {
+        System.out.print(" | ");
+      }
+    }
+    System.out.println("}");
+  }
+
+  /**
+   * Método para imprimir determinada gramática para testes.
+   * 
+   * @param gramatica
+   */
   public static void imprimirGramatica(Map<String, List<String>> gramatica) {
     Set<String> naoTerminaisImprimidos = new HashSet<>();
 
@@ -112,17 +136,13 @@ public class Gramatica {
     }
   }
 
-  private static void imprimirConjuntoDeRegras(List<String> regras) {
-    System.out.print("{");
-    for (int i = 0; i < regras.size(); i++) {
-      System.out.print(regras.get(i));
-      if (i < regras.size() - 1) {
-        System.out.print(" | ");
-      }
-    }
-    System.out.println("}");
-  }
-
+  /**
+   * Método para clonar uma gramática. Útil para operações em que não se pode
+   * modificar a referência original.
+   * 
+   * @param target - gramática a ser clonada.
+   * @return - uma nova gramática identica ao target.
+   */
   public static Map<String, List<String>> clonarGramatica(Map<String, List<String>> target) {
     Map<String, List<String>> clone = new LinkedHashMap<>();
 
@@ -135,6 +155,12 @@ public class Gramatica {
     return clone;
   }
 
+  /**
+   * Método para pegar todos os não terminais que formam regras na gramática.
+   * 
+   * @param glc
+   * @return - lista contendo os não terminais.
+   */
   public static List<String> pegarNaoTerminais(Map<String, List<String>> glc) {
     List<String> naoTerminais = new ArrayList<>();
     for (Map.Entry<String, List<String>> entry : glc.entrySet()) {
@@ -144,6 +170,12 @@ public class Gramatica {
     return naoTerminais;
   }
 
+  /**
+   * Método para pegar todos os terminais da gramática (letras minusculas).
+   * 
+   * @param glc
+   * @return - Lista sem elementos repetidos, contendo todos os terminais.
+   */
   public static List<String> pegarTerminais(Map<String, List<String>> glc) {
     List<String> terminais = new ArrayList<>();
     for (Map.Entry<String, List<String>> entry : glc.entrySet()) {
@@ -151,17 +183,97 @@ public class Gramatica {
       List<String> regrasCopy = new ArrayList<>(regras);
 
       for (String regra : regrasCopy) {
-        regra.replaceAll("[A-Z]", "");
-        for(int i = 0; i < regra.length(); i++) {
+        regra = regra.replaceAll("[A-Z]", "");
+        for (int i = 0; i < regra.length(); i++) {
           char caractere = regra.charAt(i);
 
-          if(!terminais.contains(String.valueOf(caractere))) {
+          if (!terminais.contains(String.valueOf(caractere))) {
             terminais.add(String.valueOf(caractere));
           }
         }
       }
     }
-    
     return terminais;
+  }
+
+  /**
+   * Método para verificar se determinada regra obedece as específicações da forma
+   * de chomsky, ou seja,
+   * S -> AB
+   * ou
+   * S -> a
+   * 
+   * @param regra - regra analisada
+   * @return - true caso seja valida
+   */
+  public static boolean isValidChomsky(String regra) {
+    List<String> naoTerminais = caracteresMaiusculos(regra);
+    int quantidadeNaoTerminais = naoTerminais.size();
+
+    Set<String> terminais = caracteresMinusculos(regra);
+    int quantidadeTerminais = terminais.size();
+
+    if ((quantidadeTerminais == 1 && quantidadeNaoTerminais == 0 && regra.length() == 1) ||
+        (quantidadeNaoTerminais == 2 && quantidadeTerminais == 0)) {
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
+   * Método para extrair em uma lista todos os caracteres minusculus (não
+   * repetindo) de determinada string de input.
+   * 
+   * @param input
+   * @return
+   */
+  public static Set<String> caracteresMinusculos(String input) {
+    Set<String> caracteresUnicos = new HashSet<>();
+
+    for (int i = 0; i < input.length(); i++) {
+      char caractere = input.charAt(i);
+      if (Character.isLowerCase(caractere)) {
+        caracteresUnicos.add(String.valueOf(caractere));
+      }
+    }
+
+    return caracteresUnicos;
+  }
+
+  /**
+   * Método para extrair em uma lista todos os caracteres maiusculos (podendo
+   * repetir) de determinada string de input.
+   * 
+   * @param input
+   * @return
+   */
+  public static List<String> caracteresMaiusculos(String input) {
+    List<String> caracteresUnicos = new ArrayList<>();
+
+    for (int i = 0; i < input.length(); i++) {
+      char caractere = input.charAt(i);
+      if (Character.isUpperCase(caractere)) {
+        caracteresUnicos.add(String.valueOf(caractere));
+      }
+    }
+
+    return caracteresUnicos;
+  }
+
+  /**
+   * Método para verificar se a gramática contém números.
+   * @param glc - gramática a ser verificada.
+   */
+  public static boolean contemNumeros(Map<String, List<String>> glc) {
+    for (Map.Entry<String, List<String>> entry : glc.entrySet()) {
+      String naoTerminal = entry.getKey();
+
+      if(naoTerminal.matches((".*\\d.*"))) {
+        return true;
+      }
+    }
+
+    return false;
   }
 }
