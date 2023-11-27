@@ -11,3 +11,40 @@ B -> bB | B1C
 A1 -> aB
 A2 -> aA
 B1 -> bb
+
+
+Depois de uma gramática no padrão 2NF, fazer os não nulos:
+- Não nulos = lambda indireto e diretos.
+- Retornar lista com eles.
+
+
+- Lista com os unitários de cada elemento: (G do artigo)
+
+E → T | EX
+T → F | TY 
+F → aI | bI | (Z
+I → 0I | 1I | ε
+
+E = {E, T}
+T = {T, F}
+F = {a, b}
+I = {0, 1}
+
+- Depois o que cada um é alcançado (Só unitários) (U*G do artigo).
+
+Fazer dos caras do passo acima: [E, T, F, a, b, 0, 1].
+
+E → T | EX
+T → F | TY 
+F → aI | bI | (Z
+I → 0I | 1I | ε
+
+E -> {E}
+T -> {E, T}
+F -> {F, E, T}
+a -> {a, E, T, F}
+b -> {b, E, T, F}
+0 -> {0, I}
+1 -> {0, I}
+
+Pegar a lista de cada um dos caras acima e usar no código do CYK.
