@@ -188,7 +188,7 @@ public class Gramatica {
         for (int i = 0; i < regra.length(); i++) {
           char caractere = regra.charAt(i);
 
-          if (!terminais.contains(String.valueOf(caractere))) {
+          if (!terminais.contains(String.valueOf(caractere)) && !String.valueOf(regra.charAt(i)).equals("!")) {
             terminais.add(String.valueOf(caractere));
           }
         }

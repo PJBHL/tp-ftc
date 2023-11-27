@@ -16,26 +16,16 @@ public class Forma2NF {
 
         // Removendo possíveis inuteis da gramática.
         System.out.println("\nGramatica tirando os inuteis: \n");
-        copiaMap = removerInuteis(copiaMap);
+        copiaMap = RemoverTransicoesInuteis.removerInuteis(copiaMap);
         Gramatica.imprimirGramatica(copiaMap);
         
-        // System.out.println("\nGramatica binarizada: \n");
-        // copiaMap = ConverterNaoTerminais.converterNaoTerminais(copiaMap);
-        // Gramatica.imprimirGramatica(copiaMap);
+        System.out.println("\nGramatica em 2NF: \n");
+        copiaMap = ConverterNaoTerminais.converterNaoTerminais(copiaMap);
+        Gramatica.imprimirGramatica(copiaMap);
 
-        // // Removendo possíveis inuteis da gramática.
-        // System.out.println("\nGramatica tirando os inuteis: \n");
-        // copiaMap = removerInuteis(copiaMap);
-        // Gramatica.imprimirGramatica(copiaMap);
-    }
-
-    public static Map<String, List<String>> removerInuteis(Map<String, List<String>> glc) {
-        Map<String, List<String>> glcCopy = Gramatica.clonarGramatica(glc);
-        glcCopy = RemoverTransicoesInuteis.removerRegraQueGeramElasMesmas(glcCopy);
-        glcCopy = RemoverTransicoesInuteis.removerRegrasSoltas(glcCopy);
-        glcCopy = RemoverTransicoesInuteis.removerRegraRepetida(glcCopy);
-        glcCopy = RemoverTransicoesInuteis.removerLoop(glcCopy);
-    
-        return glcCopy;
+        // Removendo possíveis inuteis da gramática.
+        System.out.println("\nGramatica tirando os inuteis: \n");
+        copiaMap = RemoverTransicoesInuteis.removerInuteis(copiaMap);
+        Gramatica.imprimirGramatica(copiaMap);
     }
 }

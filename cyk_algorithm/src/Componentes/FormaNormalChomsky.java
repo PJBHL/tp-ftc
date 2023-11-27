@@ -27,7 +27,11 @@ public class FormaNormalChomsky {
     Gramatica.imprimirGramatica(copiaMap);
 
     System.out.println("\nGramatica tirando Lambda: \n");
-    copiaMap = RemoverTransicoesVazias.eliminarProducoesVazias(this.glc);
+    copiaMap = RemoverTransicoesVazias.eliminarProducoesVazias(copiaMap);
+    Gramatica.imprimirGramatica(copiaMap);
+
+    System.out.println("\nGramatica tirando Unitários: \n");
+    copiaMap = RemoverTransicoesInuteis.removerUnitarios(copiaMap);
     Gramatica.imprimirGramatica(copiaMap);
 
     System.out.println("\nGramatica tirando regras Inúteis: \n");

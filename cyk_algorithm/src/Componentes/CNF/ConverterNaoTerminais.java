@@ -97,20 +97,36 @@ public class ConverterNaoTerminais {
         // operações para fazer na string.
         for (int i = splitResultado.size() - 1; splitResultado.size() != 2; i--) {
             String letra = splitResultado.get(i - 1) + splitResultado.get(i);
-            String substituicao = substituicoes.get(letra);
-            substituicao = substituirDupla(letra, naoTerminais);
-            if (!naoTerminais.contains(substituicao)) {
-                naoTerminais.add(substituicao);
-                substituicoes.put(substituicao, letra);
-                resultado = resultado.replace(letra, substituicao);
+            String keyExistente = verificarLista(letra, substituicoes);
+            if (keyExistente != "") {
+                resultado = resultado.replace(letra, keyExistente);
             } else {
-                resultado = resultado.replace(letra, substituicao);
+                String substituicao = substituirDupla(letra, naoTerminais);
+                if (!naoTerminais.contains(substituicao)) {
+                    naoTerminais.add(substituicao);
+                    substituicoes.put(substituicao, letra);
+                    resultado = resultado.replace(letra, substituicao);
+                }
             }
 
             splitResultado = dividirString(resultado);
+            i = splitResultado.size();
         }
 
         return resultado;
+    }
+
+    public static String verificarLista(String letra, Map<String, String> substituicoes) {
+        for (Map.Entry<String, String> each : substituicoes.entrySet()) {
+            String key = each.getKey();
+            String value = each.getValue();
+
+            if (value.equals(letra)) {
+                return key;
+            }
+        }
+
+        return "";
     }
 
     /**

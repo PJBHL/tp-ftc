@@ -36,16 +36,26 @@ import Componentes.Gramatica;
 public class RemoverTransicoesInuteis {
   public static Map<String, List<String>> removerInuteis(Map<String, List<String>> glc) {
     Map<String, List<String>> glcCopy = Gramatica.clonarGramatica(glc);
+
+    glcCopy = removerRegrasSoltas(glcCopy);
+    glcCopy = removerRegraRepetida(glcCopy);
+    glcCopy = removerLoop(glcCopy);
+
+    return glcCopy;
+  }
+
+  public static Map<String, List<String>> removerUnitarios(Map<String, List<String>> glc) {
+    Map<String, List<String>> glcCopy = Gramatica.clonarGramatica(glc);
+    // Primeiro passo é remover regras que geram elas mesmas
+    // S -> aB | S
+    glcCopy = removerRegraQueGeramElasMesmas(glcCopy);
+
+    // Depois remover regras unitárias copiando conteúdo.
     List<String> transicoesUnitarias = pegarTransicoesUnitarias(glcCopy);
     while (!transicoesUnitarias.isEmpty()) {
       glcCopy = removendoTransicoesUnitarias(transicoesUnitarias, glcCopy);
       transicoesUnitarias = pegarTransicoesUnitarias(glcCopy);
     }
-
-    glcCopy = removerRegraQueGeramElasMesmas(glcCopy);
-    glcCopy = removerRegrasSoltas(glcCopy);
-    glcCopy = removerRegraRepetida(glcCopy);
-    glcCopy = removerLoop(glcCopy);
 
     return glcCopy;
   }

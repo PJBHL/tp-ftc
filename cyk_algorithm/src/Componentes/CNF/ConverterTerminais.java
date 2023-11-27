@@ -57,9 +57,11 @@ public class ConverterTerminais {
     List<String> naoTerminais = Gramatica.pegarNaoTerminais(glcopy);
     List<String> regrasAdd = new ArrayList<>();
     String letraRandom = "";
+    boolean confirmado = false;
 
     for (String terminal : terminais) {
       letraRandom = gerarLetraMaiusculaAleatoria(naoTerminais);
+      confirmado = false;
       for (Map.Entry<String, List<String>> each : glc.entrySet()) {
         String naoTerminal = each.getKey();
         List<String> regras = each.getValue();
@@ -74,15 +76,17 @@ public class ConverterTerminais {
               glcopy.get(naoTerminal).add(regras.indexOf(regra), newRule);
               glcopy.get(naoTerminal).remove(regra);
               naoTerminais.add(letraRandom);
+              confirmado = true;
               i = regra.length();
             }
           }
         }
       }
-      if (!regrasAdd.contains(terminal))
+      if (!regrasAdd.contains(terminal) && confirmado) {
         regrasAdd.add(terminal);
-      glcopy.put(letraRandom, new ArrayList<>(regrasAdd));
-      regrasAdd.clear();
+        glcopy.put(letraRandom, new ArrayList<>(regrasAdd));
+        regrasAdd.clear();
+      }
     }
     return glcopy;
   }
