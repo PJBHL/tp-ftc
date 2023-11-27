@@ -1,14 +1,20 @@
-package Componentes.Forma2NF;
+package Componentes;
 
 import java.util.*;
-import Componentes.*;
-import Componentes.CNF.*;
 
+import Componentes.CNF.ConverterNaoTerminais;
+import Componentes.CNF.RemoverTransicoesInuteis;
+
+/**
+ * Classe para a conversão de uma gramática para o padrão
+ * descrito no artigo, a forma binária 2NF.
+ */
 public class Forma2NF {
-    public static void main(String[] args) throws Exception {
-        Gramatica gramatica = new Gramatica(args[0]);
+    Map<String, List<String>> glc;
 
-        Map<String, List<String>> glc = gramatica.getGramaticaLida();
+    public Forma2NF(Gramatica gramatica) {
+        this.glc = gramatica.getGramaticaLida();
+
         Map<String, List<String>> copiaMap = Gramatica.clonarGramatica(glc);
 
         System.out.println("\nGramatica Lida: \n");
@@ -21,11 +27,6 @@ public class Forma2NF {
         
         System.out.println("\nGramatica em 2NF: \n");
         copiaMap = ConverterNaoTerminais.converterNaoTerminais(copiaMap);
-        Gramatica.imprimirGramatica(copiaMap);
-
-        // Removendo possíveis inuteis da gramática.
-        System.out.println("\nGramatica tirando os inuteis: \n");
-        copiaMap = RemoverTransicoesInuteis.removerInuteis(copiaMap);
         Gramatica.imprimirGramatica(copiaMap);
     }
 }
