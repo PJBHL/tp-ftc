@@ -16,7 +16,7 @@ public class RemoverTransicoesVazias {
    * @param copyGlc          - cópia da gramática.
    * @return - retorna a lista de transições vazias.
    */
-  private static List<String> pegarTransicoesVazias(List<String> transicoesVazias, Map<String, List<String>> copyGlc) {
+  public static List<String> pegarTransicoesVazias(List<String> transicoesVazias, Map<String, List<String>> copyGlc) {
     for (Map.Entry<String, List<String>> each : copyGlc.entrySet()) {
       String naoTerminal = each.getKey();
       List<String> regrasCopy = each.getValue();

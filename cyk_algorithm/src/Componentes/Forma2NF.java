@@ -10,10 +10,10 @@ import Componentes.CNF.RemoverTransicoesInuteis;
  * descrito no artigo, a forma binária 2NF.
  */
 public class Forma2NF {
-    Map<String, List<String>> glc;
+    public static Map<String, List<String>> glc;
 
     public Forma2NF(Gramatica gramatica) {
-        this.glc = gramatica.getGramaticaLida();
+        glc = gramatica.getGramaticaLida();
 
         Map<String, List<String>> copiaMap = Gramatica.clonarGramatica(glc);
 
