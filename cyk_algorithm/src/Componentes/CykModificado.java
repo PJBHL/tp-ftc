@@ -2,6 +2,7 @@ package Componentes;
 
 import java.util.*;
 
+import Componentes.CNF.RemoverTransicoesInuteis;
 import Componentes.CNF.RemoverTransicoesVazias;
 
 public class CykModificado {
@@ -55,11 +56,52 @@ public class CykModificado {
                     adicionaveis.add(regra);
                 }
             }
-            glcUnitarios.put(naoTerminal, new ArrayList<>(adicionaveis));
+            if(!adicionaveis.isEmpty())
+                glcUnitarios.put(naoTerminal, new ArrayList<>(adicionaveis));
         }
 
 
         return glcUnitarios;
+    }
+
+    public static Map<String, List<String>> glcTransitividade(Map<String, List<String>> glc) {
+        Map<String, List<String>> outputMap = new LinkedHashMap<>();
+
+        // Copiando as entradas para evitar modificar o mapa original
+        for (Map.Entry<String, List<String>> entry : glc.entrySet()) {
+            String key = entry.getKey();
+            List<String> value = new ArrayList<>(entry.getValue());
+            outputMap.put(key, value);
+        }
+
+        // Calculando a transitividade
+        boolean modificado;
+        do {
+            modificado = false;
+            for (Map.Entry<String, List<String>> entry : outputMap.entrySet()) {
+                String key = entry.getKey();
+                List<String> value = entry.getValue();
+                List<String> novosElementos = new ArrayList<>();
+
+                // Verificando a transitividade
+                for (String elemento : value) {
+                    if (outputMap.containsKey(elemento)) {
+                        List<String> transitividadeElemento = outputMap.get(elemento);
+                        for (String transitividade : transitividadeElemento) {
+                            if (!value.contains(transitividade) && !novosElementos.contains(transitividade)) {
+                                novosElementos.add(transitividade);
+                                modificado = true;
+                            }
+                        }
+                    }
+                }
+
+                // Adicionando novos elementos à lista
+                value.addAll(novosElementos);
+            }
+        } while (modificado);
+
+        return outputMap;
     }
 
     public static void main(String[] args) throws Exception {
@@ -72,7 +114,13 @@ public class CykModificado {
         List<String> transicoesVaizas = nullable(glcCopy);
         System.out.println("\nLista com os vazios: " + transicoesVaizas);
 
+        System.out.println("\nGramatica com Unitários: \n");
         Map<String, List<String>> gramaticaUnitarios = pegarUnitarios(gramatica, transicoesVaizas);
         Gramatica.imprimirGramatica(gramaticaUnitarios);
+
+        System.out.println("\nGramatica Transitividade: \n");
+        Map<String, List<String>> gramaticaTransitividade = Gramatica.clonarGramatica(gramaticaUnitarios);
+        gramaticaTransitividade = glcTransitividade(gramaticaUnitarios);
+        Gramatica.imprimirGramatica(gramaticaTransitividade);
     }
 }
