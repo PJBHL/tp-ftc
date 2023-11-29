@@ -15,18 +15,16 @@ public class Forma2NF {
     public Forma2NF(Gramatica gramatica) {
         glc = gramatica.getGramaticaLida();
 
-        Map<String, List<String>> copiaMap = Gramatica.clonarGramatica(glc);
-
         System.out.println("\nGramatica Lida: \n");
-        Gramatica.imprimirGramatica(copiaMap);
+        Gramatica.imprimirGramatica(glc);
 
         // Removendo possíveis inuteis da gramática.
         System.out.println("\nGramatica tirando os inuteis: \n");
-        copiaMap = RemoverTransicoesInuteis.removerInuteis(copiaMap);
-        Gramatica.imprimirGramatica(copiaMap);
+        glc = RemoverTransicoesInuteis.removerInuteis(glc);
+        Gramatica.imprimirGramatica(glc);
         
         System.out.println("\nGramatica em 2NF: \n");
-        copiaMap = ConverterNaoTerminais.converterNaoTerminais(copiaMap);
-        Gramatica.imprimirGramatica(copiaMap);
+        glc = ConverterNaoTerminais.converterNaoTerminais(glc);
+        Gramatica.imprimirGramatica(glc);
     }
 }
