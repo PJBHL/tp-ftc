@@ -1,0 +1,4 @@
+S -> AA0 | aB | a
+A -> B | S
+B -> b | !
+A0 -> SA

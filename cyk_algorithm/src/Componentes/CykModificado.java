@@ -3,7 +3,7 @@ package Componentes;
 import java.io.*;
 import java.util.*;
 
-import Componentes.CNF.RemoverTransicoesVazias;
+import Componentes.CNF.*;
 
 public class CykModificado {
     /**
@@ -23,6 +23,13 @@ public class CykModificado {
         return transicoesVazias;
     }
 
+    /**
+     * Método para pegar uma gramática com os elementos unitários.
+     * 
+     * @param glc       - gramática para retornar uma gramática unitária.
+     * @param nullables - lista com os não terminais que geram transições vazias.
+     * @return - uma nova gramática com apenas unitários.
+     */
     public static Map<String, List<String>> pegarUnitarios(Map<String, List<String>> glc, List<String> nullables) {
         Map<String, List<String>> glcUnitarios = new LinkedHashMap<>();
 
@@ -39,11 +46,20 @@ public class CykModificado {
                             String terminal = new String(regra).replaceAll("[A-Z]", "");
                             adicionaveis.add(terminal);
                         } else
-                            for (String nullable : nullables)
-                                if (regra.contains(nullable))
-                                    adicionaveis.add(regra.replaceAll(nullable, ""));
+                            for (String nullable : nullables) {
+                                if (regra.contains(nullable)) {
+                                    // Verifica se o próximo caractere depois do nullable é um número.
+                                    // Se for um número significa que ele na verdade é um outro não terminal gerado aleatoriamente.
+                                    List<String> splitString = ConverterNaoTerminais.dividirString(regra);
+                                    for(String split : splitString) {
+                                        if(split.matches(".*\\d.*")) {
+                                            adicionaveis.add(split);
+                                        }
+                                    }
+                                }
+                            }
                     }
-                } else if (!regra.equals("!"))
+                } else if (!regra.equals("!")) // Se a regra é diferente de lambda, nesse ponto já é unitária.
                     adicionaveis.add(regra);
             }
             if (!adicionaveis.isEmpty() && !adicionaveis.contains(""))
@@ -53,6 +69,14 @@ public class CykModificado {
         return glcUnitarios;
     }
 
+    /**
+     * Método para pegar a transitividade de cada elemento da gramática de
+     * unitários,
+     * ou seja, a partir de um elemento X chego nos elementos w, y, z ...
+     * 
+     * @param glc - gramática com unitários.
+     * @return - nova gramática com a transitividade de cada não terminal.
+     */
     public static Map<String, List<String>> glcTransitividade(Map<String, List<String>> glc) {
         Map<String, List<String>> gramaticaTransitiva = Gramatica.clonarGramatica(glc);
 
@@ -85,12 +109,24 @@ public class CykModificado {
         return gramaticaTransitiva;
     }
 
+    /**
+     * Método para fazer o inverso da gramática anterior, ou seja, esse elemento X
+     * chega-se nele por w, y, z...
+     * 
+     * @param glc - gramática com a transitividade de cada elemento.
+     * @return - gramática com o inverso da transitividade de cada elemento.
+     */
     public static Map<String, List<String>> inversoTransitiva(Map<String, List<String>> glc) {
         Map<String, List<String>> invertedMap = new LinkedHashMap<>();
 
         for (Map.Entry<String, List<String>> entry : glc.entrySet()) {
             String key = entry.getKey();
             List<String> values = entry.getValue();
+
+            if (!invertedMap.containsKey(key)) {
+                invertedMap.put(key, new ArrayList<>());
+                invertedMap.get(key).add(key);  // Adiciona o próprio elemento à lista
+            }
 
             for (String value : values) {
                 if (!invertedMap.containsKey(value)) {
@@ -101,9 +137,16 @@ public class CykModificado {
             }
         }
 
+        invertedMap.remove(glc.keySet().iterator().next());
+
         return invertedMap;
     }
 
+    /**
+     * Método para printar a tabela do método CYK em um arquivo, para comparação de resultados e testes.
+     * @param tabela - tabela [n][n] para print.
+     * @param filename - nome do arquivo
+     */
     public static void printTableToFile(List<String>[][] tabela, String filename) {
         try (PrintWriter writer = new PrintWriter(new FileWriter(filename))) {
             int n = tabela.length;
@@ -133,6 +176,13 @@ public class CykModificado {
         writer.println("]");
     }
 
+    /**
+     * Método cyk modificidado proposto no artigo, aqui são usadas duas tabelas para comparação e duas gramáticas.
+     * @param glc - gramática original, lida do arquivo.
+     * @param inversa - gramática de transitividade inversa, o último dos passos dos métodos acima.
+     * @param word - sentença a ser verificada se pertence ou não a gramática.
+     * @return - true se a sentença pertence a gramática.
+     */
     @SuppressWarnings("unchecked") // Warning ao criar uma new List sem um tipo abstrato.
     public static boolean cykModificado(Map<String, List<String>> glc, Map<String, List<String>> inversa, String word) {
         int n = word.length();
@@ -140,6 +190,7 @@ public class CykModificado {
         List<String>[][] tabela1 = new ArrayList[n][n];
         Set<String> naoTerminais = glc.keySet();
 
+        // Inicializar tabelas com tamanho da palavra..
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 tabela[i][j] = new ArrayList<>();
@@ -147,6 +198,7 @@ public class CykModificado {
             }
         }
 
+        // Colocando as regras e não terminais baseados na gramática inversa na primeira tabela.
         for (int i = 0; i < n; i++) {
             List<String> regras = inversa.get(String.valueOf(word.charAt(i)));
             if (regras != null) {
@@ -156,7 +208,7 @@ public class CykModificado {
             }
         }
 
-        printTableToFile(tabela, "output.txt");
+        printTableToFile(tabela, "tabela-inicial.txt");
 
         for (int j = 1; j < n; j++) {
             for (int i = j - 1; i >= 0; i--) {
@@ -165,10 +217,11 @@ public class CykModificado {
                     for (String naoTerminal : naoTerminais) {
                         for (String regra : glc.get(naoTerminal)) {
                             if (regra.length() != 1) {
-                                char simbolo1 = regra.charAt(0);
-                                char simbolo2 = regra.charAt(1);
-                                if (tabela[i][h].contains(String.valueOf(simbolo1))
-                                        && tabela[h + 1][j].contains(String.valueOf(simbolo2))) {
+                                List<String> splitRegra = ConverterNaoTerminais.dividirString(regra);
+                                String regra1 = splitRegra.get(0);
+                                String regra2 = splitRegra.get(1);
+                                if (tabela[i][h].contains(regra1)
+                                        && tabela[h + 1][j].contains(regra2)) {
                                     if (inversa.get(naoTerminal) == null) {
                                         tabela1[i][j].add(naoTerminal);
                                     } else {
@@ -187,9 +240,28 @@ public class CykModificado {
             }
         }
 
-        printTableToFile(tabela, "output2.txt");
+        printTableToFile(tabela, "tabela-final.txt");
 
+        // Verifica se a tabela contém a primeira regra. Caso contenha, a sentença pertence a gramática.
         return tabela[0][n - 1].contains("E");
+    }
+
+    private static void testarSentencas(String caminhoArquivo, Map<String, List<String>> glc, Map<String, List<String>> inversa) {
+        try (BufferedReader br = new BufferedReader(new FileReader(caminhoArquivo))) {
+            String linha;
+            while ((linha = br.readLine()) != null) {
+                // Remova espaços em branco no início e no final da linha
+                linha = linha.trim();
+
+                // Testar a sentença com a função cykModificado
+                boolean resultado = cykModificado(glc, inversa, linha);
+
+                // Exibir o resultado para cada sentença
+                System.out.println("A frase ( " + linha + " ) " + (resultado ? "é da linguagem" : "não é da linguagem"));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) throws Exception {
@@ -215,6 +287,6 @@ public class CykModificado {
         gramaticaInversa = inversoTransitiva(gramaticaTransitividade);
         Gramatica.imprimirGramatica(gramaticaInversa);
 
-        System.out.println(cykModificado(gramatica, gramaticaInversa, "(ac+b)*a"));
+        testarSentencas("C:\\Users\\joaopc\\Documents\\tp-ftc\\cyk_algorithm\\src\\Componentes/frases.txt", glcCopy, gramaticaInversa);
     }
 }
