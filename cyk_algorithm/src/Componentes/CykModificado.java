@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 
+import Componentes.CNF.ConverterNaoTerminais;
 import Componentes.CNF.RemoverTransicoesInuteis;
 import Componentes.CNF.RemoverTransicoesVazias;
 
@@ -18,11 +19,20 @@ public class CykModificado {
             List<String> regras = each.getValue();
 
             for (String eachTV : transicoesVazias) {
-                if (regras.contains(eachTV) && eachTV != naoTerminal) {
-                    regras.remove(eachTV);
-                    transicoesVazias.add(naoTerminal);
+                for (String regra : regras) {
+                    List<String> regraSplit = ConverterNaoTerminais.dividirString(regra);
+                    if (regraSplit.size() == 2
+                            && (regra.charAt(0) == eachTV.charAt(0) && regra.charAt(1) == eachTV.charAt(0))) {
+                        regras.remove(regra);
+                        transicoesVazias.add(naoTerminal);
+                        return pegarTransicoesVazias(transicoesVazias, copyGlc);
 
-                    return pegarTransicoesVazias(transicoesVazias, copyGlc);
+                    } else if (regras.contains(eachTV) && eachTV != naoTerminal) {
+                        regras.remove(eachTV);
+                        transicoesVazias.add(naoTerminal);
+
+                        return pegarTransicoesVazias(transicoesVazias, copyGlc);
+                    }
                 }
             }
         }
@@ -56,12 +66,8 @@ public class CykModificado {
                         String terminal = new String(regra).replaceAll("[A-Z]", "");
                         adicionaveis.add(terminal);
                     }
-                    // !nullables.stream().anyMatch(regra::contains) Verificar se posso adicionar
-                    // não terminais que geram
-                    // lambda
-                } else if (!regra.equals("!")) {
+                } else if (!regra.equals("!"))
                     adicionaveis.add(regra);
-                }
             }
             if (!adicionaveis.isEmpty() && !adicionaveis.contains(""))
                 glcUnitarios.put(naoTerminal, new ArrayList<>(adicionaveis));
