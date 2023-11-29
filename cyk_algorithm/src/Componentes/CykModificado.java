@@ -1,52 +1,24 @@
 package Componentes;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.*;
 
-import Componentes.CNF.ConverterNaoTerminais;
-import Componentes.CNF.RemoverTransicoesInuteis;
 import Componentes.CNF.RemoverTransicoesVazias;
 
 public class CykModificado {
-
-    // Verificar se para pegar transições vazias também é possível em 2 letras
-    // repetidas.
-    public static List<String> pegarTransicoesVazias(List<String> transicoesVazias, Map<String, List<String>> copyGlc) {
-        for (Map.Entry<String, List<String>> each : copyGlc.entrySet()) {
-            String naoTerminal = each.getKey();
-            List<String> regras = each.getValue();
-
-            for (String eachTV : transicoesVazias) {
-                for (String regra : regras) {
-                    List<String> regraSplit = ConverterNaoTerminais.dividirString(regra);
-                    if (regraSplit.size() == 2
-                            && (regra.charAt(0) == eachTV.charAt(0) && regra.charAt(1) == eachTV.charAt(0))) {
-                        regras.remove(regra);
-                        transicoesVazias.add(naoTerminal);
-                        return pegarTransicoesVazias(transicoesVazias, copyGlc);
-
-                    } else if (regras.contains(eachTV) && eachTV != naoTerminal) {
-                        regras.remove(eachTV);
-                        transicoesVazias.add(naoTerminal);
-
-                        return pegarTransicoesVazias(transicoesVazias, copyGlc);
-                    }
-                }
-            }
-        }
-
-        transicoesVazias.remove("!");
-        return transicoesVazias;
-    }
-
+    /**
+     * Método para pegar os não terminais que possuem transições lambdas diretas e
+     * indiretas.
+     * 
+     * @param glc - gramática para coletar os lambdas.
+     * @return - lista com os não terminais que geram transições vazias.
+     */
     public static List<String> nullable(Map<String, List<String>> glc) {
         List<String> transicoesVazias = new ArrayList<>();
         Map<String, List<String>> glcCopy = Gramatica.clonarGramatica(glc);
         transicoesVazias.add("!");
 
-        transicoesVazias = pegarTransicoesVazias(transicoesVazias, glcCopy);
+        transicoesVazias = RemoverTransicoesVazias.pegarTransicoesVazias(transicoesVazias, glcCopy);
 
         return transicoesVazias;
     }
@@ -63,8 +35,13 @@ public class CykModificado {
                 if (regra.length() >= 2) {
                     // Unitários juntos de não terminais que formam lambda.
                     if (nullables.stream().anyMatch(regra::contains)) {
-                        String terminal = new String(regra).replaceAll("[A-Z]", "");
-                        adicionaveis.add(terminal);
+                        if (regra.matches(".*[a-z].*")) {
+                            String terminal = new String(regra).replaceAll("[A-Z]", "");
+                            adicionaveis.add(terminal);
+                        } else
+                            for (String nullable : nullables)
+                                if (regra.contains(nullable))
+                                    adicionaveis.add(regra.replaceAll(nullable, ""));
                     }
                 } else if (!regra.equals("!"))
                     adicionaveis.add(regra);

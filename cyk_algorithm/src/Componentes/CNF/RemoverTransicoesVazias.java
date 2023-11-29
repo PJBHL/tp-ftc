@@ -19,14 +19,23 @@ public class RemoverTransicoesVazias {
   public static List<String> pegarTransicoesVazias(List<String> transicoesVazias, Map<String, List<String>> copyGlc) {
     for (Map.Entry<String, List<String>> each : copyGlc.entrySet()) {
       String naoTerminal = each.getKey();
-      List<String> regrasCopy = each.getValue();
+      List<String> regras = each.getValue();
 
       for (String eachTV : transicoesVazias) {
-        if (regrasCopy.contains(eachTV) && eachTV != naoTerminal) {
-          regrasCopy.remove(eachTV);
-          transicoesVazias.add(naoTerminal);
+        for (String regra : regras) {
+          List<String> regraSplit = ConverterNaoTerminais.dividirString(regra);
+          if (regraSplit.size() == 2
+              && (regra.charAt(0) == eachTV.charAt(0) && regra.charAt(1) == eachTV.charAt(0))) {
+            regras.remove(regra);
+            transicoesVazias.add(naoTerminal);
+            return pegarTransicoesVazias(transicoesVazias, copyGlc);
 
-          return pegarTransicoesVazias(transicoesVazias, copyGlc);
+          } else if (regras.contains(eachTV) && eachTV != naoTerminal) {
+            regras.remove(eachTV);
+            transicoesVazias.add(naoTerminal);
+
+            return pegarTransicoesVazias(transicoesVazias, copyGlc);
+          }
         }
       }
     }
