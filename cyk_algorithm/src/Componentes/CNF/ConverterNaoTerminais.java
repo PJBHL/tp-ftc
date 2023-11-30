@@ -2,7 +2,7 @@ package Componentes.CNF;
 
 import java.util.*;
 
-import Componentes.Gramatica;
+import Componentes.*;
 
 /**
  * Classe para o último passo da Forma Normal de Chomsky. Converter os não
@@ -48,37 +48,6 @@ public class ConverterNaoTerminais {
     }
 
     /**
-     * Método para dividr uma string em posições de um array.
-     * A trava da divisão é um número. Exemplo de entrada e saída:
-     * Entrada:
-     * CAAA
-     * Saída:
-     * Lista com C A A A
-     * Entrada com número:
-     * C1AA
-     * Saída:
-     * Lista com C1 A A
-     */
-    public static List<String> dividirString(String input) {
-        List<String> newArray = new ArrayList<>();
-
-        String regra = String.valueOf(input.charAt(0));
-
-        for (int i = 1; i < input.length(); i++) {
-            if (!Character.isDigit(input.charAt(i))) {
-                newArray.add(regra);
-                regra = String.valueOf(input.charAt(i));
-            } else {
-                regra += String.valueOf(input.charAt(i));
-            }
-        }
-
-        newArray.add(regra);
-
-        return newArray;
-    }
-
-    /**
      * Método para fazer a substituição de duplas maiusculas para criar um novo não
      * terminal.
      * 
@@ -91,7 +60,7 @@ public class ConverterNaoTerminais {
             List<String> naoTerminais) {
 
         String resultado = original;
-        List<String> splitResultado = dividirString(resultado);
+        List<String> splitResultado = Gramatica.dividirString(resultado);
 
         // Enquanto o vetor 'splitResultado' não tiver tamanho igual a dois, há
         // operações para fazer na string.
@@ -109,7 +78,7 @@ public class ConverterNaoTerminais {
                 }
             }
 
-            splitResultado = dividirString(resultado);
+            splitResultado = Gramatica.dividirString(resultado);
             i = splitResultado.size();
         }
 

@@ -1,12 +1,14 @@
-package Componentes;
-
 import java.util.*;
 import java.util.regex.*;
 
+import Componentes.*;
+import Componentes.CNF.FormaNormalChomsky;
+
 /**
- * Classe com a implementação original do algoritmo CYK.
+ * Classe com a implementação original do algoritmo CYK
+ * recebe uma gramática na Forma Normal de Chomsky.
  */
-public class Cyk {
+public class CykOriginal {
   /**
    * Método para excluir nao terminais da lista antes de ser testado
    * 
@@ -79,11 +81,12 @@ public class Cyk {
    * Em resumo T, nos diz se w é uma sentença de G ou não.
    */
   @SuppressWarnings("unchecked") // Warning ao criar uma new List sem um tipo abstrato.
-  public boolean cykAlgorithm(Map<String, List<String>> gramatica, String word) {
+  public static boolean cykOriginal(Map<String, List<String>> gramatica, String word) {
     int n = word.length();
 
     // Tabela (ou matriz) T com armazenamento de resultados.
     List<String>[][] tabela = new List[n][n];
+    List<String> naoTerminais = Gramatica.pegarNaoTerminais(gramatica);
 
     // Inicializar tabela.
     for (int i = 0; i < n; i++)
@@ -103,21 +106,20 @@ public class Cyk {
       }
     }
 
-    // Tabela sendo preenchida com regras da gramática.
-    for (int j = 2; j <= n; j++) {
-      for (int i = 0; i <= n - j; i++) {
-        int k = i + j - 1;
-        for (int z = i; z < k; z++) {
-          for (Map.Entry<String, List<String>> entry : gramatica.entrySet()) {
-            String naoTerminal = entry.getKey();
-            List<String> regras = entry.getValue();
-            for (String regra : regras) {
-              if (regra.length() == 2) {
-                char simbolo1 = regra.charAt(0);
-                char simbolo2 = regra.charAt(1);
-                if (tabela[i][z].contains(String.valueOf(simbolo1)) &&
-                    tabela[z + 1][k].contains(String.valueOf(simbolo2))) {
-                  tabela[i][k].add(naoTerminal);
+    Tester.printTableToFile(tabela, "tabela-inicial.txt");
+
+    for (int j = 1; j < n; j++) {
+      for (int i = j - 1; i >= 0; i--) {
+        for (int h = i; h <= j - 1; h++) {
+          for (String naoTerminal : naoTerminais) {
+            for (String regra : gramatica.get(naoTerminal)) {
+              if (regra.length() != 1) {
+                List<String> splitRegra = Gramatica.dividirString(regra);
+                String regra1 = splitRegra.get(0);
+                String regra2 = splitRegra.get(1);
+                if (tabela[i][h].contains(regra1)
+                    && tabela[h + 1][j].contains(regra2)) {
+                  tabela[i][j].add(naoTerminal);
                 }
               }
             }
@@ -126,7 +128,15 @@ public class Cyk {
       }
     }
 
+    Tester.printTableToFile(tabela, "tabela-final.txt");
+
     // Se a tabela contém o "S" a sentença / palavra testada pertence a gramática.
-    return tabela[0][n - 1].contains("S");
+    return tabela[0][n - 1].contains("E");
+  }
+
+  public static void main(String[] args) throws Exception {
+    Gramatica glc = new Gramatica(args[0]);
+    FormaNormalChomsky chomsky = new FormaNormalChomsky(glc);
+    System.out.println(cykOriginal(chomsky.getGlc(), "b*b*a*bddcc"));
   }
 }

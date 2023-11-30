@@ -111,7 +111,7 @@ public class RemoverTransicoesInuteis {
       List<String> regras = each.getValue();
 
       for (String each_regra : regras) {
-        List<String> separarString = ConverterNaoTerminais.dividirString(each_regra);
+        List<String> separarString = Gramatica.dividirString(each_regra);
 
         for(String separados : separarString) {
           if(!nao_terminais.contains(separados) && separados.matches(".*[A-Z].*"))

@@ -2,16 +2,17 @@ package Componentes.CNF;
 
 import java.util.*;
 
-import Componentes.Gramatica;
+import Componentes.*;
 
 /**
  * Classe para converter os terminais da gramática em novos não terminais
  * e adicionar uma regra para isso. Exemplo:
- * S -> a
+ * S -> aB
+ * B -> b
  * Gera uma letra aleatória para "a".
- * S -> M.
+ * S -> MB.
  * M agora deve gerar "a".
- * S -> M
+ * S -> MB
  * M -> a
  */
 public class ConverterTerminais {
@@ -62,7 +63,7 @@ public class ConverterTerminais {
     for (String terminal : terminais) {
       letraRandom = gerarLetraMaiusculaAleatoria(naoTerminais);
       confirmado = false;
-      for (Map.Entry<String, List<String>> each : glc.entrySet()) {
+      for (Map.Entry<String, List<String>> each : glcopy.entrySet()) {
         String naoTerminal = each.getKey();
         List<String> regras = each.getValue();
 

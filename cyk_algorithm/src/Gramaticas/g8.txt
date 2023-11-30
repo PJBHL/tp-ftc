@@ -1,2 +1,0 @@
-S -> AaAaAaA
-A -> a | !

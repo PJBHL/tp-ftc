@@ -23,7 +23,6 @@ public class RemoverTransicoesVazias {
 
       for (String eachTV : transicoesVazias) {
         for (String regra : regras) {
-          List<String> regraSplit = ConverterNaoTerminais.dividirString(regra);
           if (regra.length() == 2
               && (regra.charAt(0) == eachTV.charAt(0) && regra.charAt(1) == eachTV.charAt(0))) {
             regras.remove(regra);

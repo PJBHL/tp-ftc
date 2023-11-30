@@ -1,6 +1,6 @@
-package Componentes;
+package Componentes.CNF;
 
-import Componentes.CNF.*;
+import Componentes.Gramatica;
 
 import java.util.*;
 
@@ -45,5 +45,11 @@ public class FormaNormalChomsky {
     System.out.println("\nGramatica em CNF: \n");
     copiaMap = ConverterNaoTerminais.converterNaoTerminais(copiaMap);
     Gramatica.imprimirGramatica(copiaMap);
+
+    this.glc = copiaMap;
+  }
+
+  public Map<String, List<String>> getGlc() {
+      return glc;
   }
 }

@@ -264,17 +264,49 @@ public class Gramatica {
 
   /**
    * Método para verificar se a gramática contém números.
+   * 
    * @param glc - gramática a ser verificada.
    */
   public static boolean contemNumeros(Map<String, List<String>> glc) {
     for (Map.Entry<String, List<String>> entry : glc.entrySet()) {
       String naoTerminal = entry.getKey();
 
-      if(naoTerminal.matches((".*\\d.*"))) {
+      if (naoTerminal.matches((".*\\d.*"))) {
         return true;
       }
     }
 
     return false;
+  }
+
+  /**
+   * Método para dividr uma string em posições de um array.
+   * A trava da divisão é um número. Exemplo de entrada e saída:
+   * Entrada:
+   * CAAA
+   * Saída:
+   * Lista com C A A A
+   * Entrada com número:
+   * C1AA
+   * Saída:
+   * Lista com C1 A A
+   */
+  public static List<String> dividirString(String input) {
+    List<String> newArray = new ArrayList<>();
+
+    String regra = String.valueOf(input.charAt(0));
+
+    for (int i = 1; i < input.length(); i++) {
+      if (!Character.isDigit(input.charAt(i))) {
+        newArray.add(regra);
+        regra = String.valueOf(input.charAt(i));
+      } else {
+        regra += String.valueOf(input.charAt(i));
+      }
+    }
+
+    newArray.add(regra);
+
+    return newArray;
   }
 }
