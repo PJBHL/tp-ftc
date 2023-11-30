@@ -106,14 +106,15 @@ public class Gramatica {
    * @param regras
    */
   private static void imprimirConjuntoDeRegras(List<String> regras) {
-    System.out.print("{");
+    // System.out.print("{");
     for (int i = 0; i < regras.size(); i++) {
       System.out.print(regras.get(i));
       if (i < regras.size() - 1) {
         System.out.print(" | ");
       }
     }
-    System.out.println("}");
+    System.out.println();
+    // System.out.println("}");
   }
 
   /**
@@ -187,7 +188,7 @@ public class Gramatica {
         for (int i = 0; i < regra.length(); i++) {
           char caractere = regra.charAt(i);
 
-          if (!terminais.contains(String.valueOf(caractere))) {
+          if (!terminais.contains(String.valueOf(caractere)) && !String.valueOf(regra.charAt(i)).equals("!")) {
             terminais.add(String.valueOf(caractere));
           }
         }
@@ -263,17 +264,49 @@ public class Gramatica {
 
   /**
    * Método para verificar se a gramática contém números.
+   * 
    * @param glc - gramática a ser verificada.
    */
   public static boolean contemNumeros(Map<String, List<String>> glc) {
     for (Map.Entry<String, List<String>> entry : glc.entrySet()) {
       String naoTerminal = entry.getKey();
 
-      if(naoTerminal.matches((".*\\d.*"))) {
+      if (naoTerminal.matches((".*\\d.*"))) {
         return true;
       }
     }
 
     return false;
+  }
+
+  /**
+   * Método para dividr uma string em posições de um array.
+   * A trava da divisão é um número. Exemplo de entrada e saída:
+   * Entrada:
+   * CAAA
+   * Saída:
+   * Lista com C A A A
+   * Entrada com número:
+   * C1AA
+   * Saída:
+   * Lista com C1 A A
+   */
+  public static List<String> dividirString(String input) {
+    List<String> newArray = new ArrayList<>();
+
+    String regra = String.valueOf(input.charAt(0));
+
+    for (int i = 1; i < input.length(); i++) {
+      if (!Character.isDigit(input.charAt(i))) {
+        newArray.add(regra);
+        regra = String.valueOf(input.charAt(i));
+      } else {
+        regra += String.valueOf(input.charAt(i));
+      }
+    }
+
+    newArray.add(regra);
+
+    return newArray;
   }
 }

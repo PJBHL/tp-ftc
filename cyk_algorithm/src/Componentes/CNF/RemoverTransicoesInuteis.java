@@ -36,16 +36,26 @@ import Componentes.Gramatica;
 public class RemoverTransicoesInuteis {
   public static Map<String, List<String>> removerInuteis(Map<String, List<String>> glc) {
     Map<String, List<String>> glcCopy = Gramatica.clonarGramatica(glc);
+
+    glcCopy = removerRegrasSoltas(glcCopy);
+    glcCopy = removerRegraRepetida(glcCopy);
+    glcCopy = removerLoop(glcCopy);
+
+    return glcCopy;
+  }
+
+  public static Map<String, List<String>> removerUnitarios(Map<String, List<String>> glc) {
+    Map<String, List<String>> glcCopy = Gramatica.clonarGramatica(glc);
+    // Primeiro passo é remover regras que geram elas mesmas
+    // S -> aB | S
+    glcCopy = removerRegraQueGeramElasMesmas(glcCopy);
+
+    // Depois remover regras unitárias copiando conteúdo.
     List<String> transicoesUnitarias = pegarTransicoesUnitarias(glcCopy);
     while (!transicoesUnitarias.isEmpty()) {
       glcCopy = removendoTransicoesUnitarias(transicoesUnitarias, glcCopy);
       transicoesUnitarias = pegarTransicoesUnitarias(glcCopy);
     }
-    
-    glcCopy = removerRegraQueGeramElasMesmas(glcCopy);
-    glcCopy = removerRegrasSoltas(glcCopy);
-    glcCopy = removerRegraRepetida(glcCopy);
-    glcCopy = removerLoop(glcCopy);
 
     return glcCopy;
   }
@@ -94,23 +104,18 @@ public class RemoverTransicoesInuteis {
     Map<String, List<String>> glcCopy = Gramatica.clonarGramatica(glc);
 
     List<String> nao_terminais = new ArrayList<>();
+    // Não remover a regra inicial.
     nao_terminais.add("S");
 
     for (Map.Entry<String, List<String>> each : glc.entrySet()) {
       List<String> regras = each.getValue();
 
       for (String each_regra : regras) {
+        List<String> separarString = Gramatica.dividirString(each_regra);
 
-        String regra_only_maisc = each_regra.replaceAll("[a-z]", "");
-
-        for (int i = 0; i < regra_only_maisc.length(); i++) {
-
-          String letra = String.valueOf(regra_only_maisc.charAt(i));
-
-          if (!nao_terminais.contains(letra)) {
-            nao_terminais.add(letra);
-          }
-
+        for(String separados : separarString) {
+          if(!nao_terminais.contains(separados) && separados.matches(".*[A-Z].*"))
+            nao_terminais.add(separados);
         }
       }
     }

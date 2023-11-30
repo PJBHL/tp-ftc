@@ -16,17 +16,26 @@ public class RemoverTransicoesVazias {
    * @param copyGlc          - cópia da gramática.
    * @return - retorna a lista de transições vazias.
    */
-  private static List<String> pegarTransicoesVazias(List<String> transicoesVazias, Map<String, List<String>> copyGlc) {
+  public static List<String> pegarTransicoesVazias(List<String> transicoesVazias, Map<String, List<String>> copyGlc) {
     for (Map.Entry<String, List<String>> each : copyGlc.entrySet()) {
       String naoTerminal = each.getKey();
-      List<String> regrasCopy = each.getValue();
+      List<String> regras = each.getValue();
 
       for (String eachTV : transicoesVazias) {
-        if (regrasCopy.contains(eachTV) && eachTV != naoTerminal) {
-          regrasCopy.remove(eachTV);
-          transicoesVazias.add(naoTerminal);
+        for (String regra : regras) {
+          if (regra.length() == 2
+              && (regra.charAt(0) == eachTV.charAt(0) && regra.charAt(1) == eachTV.charAt(0))) {
+            regras.remove(regra);
+            transicoesVazias.add(naoTerminal);
+            return pegarTransicoesVazias(transicoesVazias, copyGlc);
 
-          return pegarTransicoesVazias(transicoesVazias, copyGlc);
+          } else if (regras.contains(eachTV) && eachTV != naoTerminal) {
+            regras.remove(eachTV);
+            if(!transicoesVazias.contains(naoTerminal))
+              transicoesVazias.add(naoTerminal);
+
+            return pegarTransicoesVazias(transicoesVazias, copyGlc);
+          }
         }
       }
     }

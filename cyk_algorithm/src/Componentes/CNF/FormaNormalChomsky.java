@@ -1,6 +1,6 @@
-package Componentes;
+package Componentes.CNF;
 
-import Componentes.CNF.*;
+import Componentes.Gramatica;
 
 import java.util.*;
 
@@ -27,7 +27,11 @@ public class FormaNormalChomsky {
     Gramatica.imprimirGramatica(copiaMap);
 
     System.out.println("\nGramatica tirando Lambda: \n");
-    copiaMap = RemoverTransicoesVazias.eliminarProducoesVazias(this.glc);
+    copiaMap = RemoverTransicoesVazias.eliminarProducoesVazias(copiaMap);
+    Gramatica.imprimirGramatica(copiaMap);
+
+    System.out.println("\nGramatica tirando Unitários: \n");
+    copiaMap = RemoverTransicoesInuteis.removerUnitarios(copiaMap);
     Gramatica.imprimirGramatica(copiaMap);
 
     System.out.println("\nGramatica tirando regras Inúteis: \n");
@@ -41,5 +45,11 @@ public class FormaNormalChomsky {
     System.out.println("\nGramatica em CNF: \n");
     copiaMap = ConverterNaoTerminais.converterNaoTerminais(copiaMap);
     Gramatica.imprimirGramatica(copiaMap);
+
+    this.glc = copiaMap;
+  }
+
+  public Map<String, List<String>> getGlc() {
+      return glc;
   }
 }
