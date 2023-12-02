@@ -87,6 +87,7 @@ public class CykOriginal {
     // Tabela (ou matriz) T com armazenamento de resultados.
     List<String>[][] tabela = new List[n][n];
     List<String> naoTerminais = Gramatica.pegarNaoTerminais(gramatica);
+    String primeiroNaoTerminal = gramatica.keySet().stream().findFirst().orElse(null);
 
     // Inicializar tabela.
     for (int i = 0; i < n; i++)
@@ -131,12 +132,14 @@ public class CykOriginal {
     Tester.printTableToFile(tabela, "tabela-final.txt");
 
     // Se a tabela contém o "S" a sentença / palavra testada pertence a gramática.
-    return tabela[0][n - 1].contains("E");
+    return tabela[0][n - 1].contains(primeiroNaoTerminal);
   }
 
   public static void main(String[] args) throws Exception {
     Gramatica glc = new Gramatica(args[0]);
+    long tempoInicio = System.currentTimeMillis();
     FormaNormalChomsky chomsky = new FormaNormalChomsky(glc);
-    System.out.println(cykOriginal(chomsky.getGlc(), "b*b*a*bddcc"));
+    long tempoConversao = System.currentTimeMillis();
+    Tester.testarSentencas("C:\\Users\\joaopc\\Documents\\tp-ftc\\cyk_algorithm\\src/frases.txt", chomsky.getGlc(), null, "resultados-original.txt", false, tempoInicio, tempoConversao);   
   }
 }

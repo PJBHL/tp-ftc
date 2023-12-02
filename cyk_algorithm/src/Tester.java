@@ -1,10 +1,5 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 
 /**
  * Classe com métodos uteis para testes e saída de resultados.
@@ -47,21 +42,39 @@ public class Tester {
         writer.println("]");
     }
 
-    public static void testarSentencas(String caminhoArquivo, Map<String, List<String>> glc,
-            Map<String, List<String>> inversa) {
-        try (BufferedReader br = new BufferedReader(new FileReader(caminhoArquivo))) {
+    public static void testarSentencas(String caminhoArquivo, Map<String, List<String>> gramatica, Map<String, List<String>> gramaticaInversa, String resultadosArquivo, boolean usarCykModificado, long tempoDeInicio, long tempoConversao) {
+        try (BufferedReader br = new BufferedReader(new FileReader(caminhoArquivo));
+             PrintWriter writer = new PrintWriter(new FileWriter(resultadosArquivo))) {
+
+            writer.println("Tempo de conversão para a Forma Normal de Chomsky ou 2NF: " + (tempoConversao - tempoDeInicio) + " milissegundos\n");
+
             String linha;
             while ((linha = br.readLine()) != null) {
                 // Remova espaços em branco no início e no final da linha
                 linha = linha.trim();
+                
+                // Testar a sentença com o algoritmo apropriado
+                long tempoDeCadaTeste = System.currentTimeMillis();
+                boolean resultado;
+                if (usarCykModificado) {
+                    resultado = CykModificado.cykModificado(gramatica, gramaticaInversa, linha);
+                } else {
+                    resultado = CykOriginal.cykOriginal(gramatica, linha);
+                }
 
-                // Testar a sentença com a função cykModificado
-                boolean resultado = CykModificado.cykModificado(glc, inversa, linha);
+                // Medir o tempo de execução
+                long tempoFim = System.currentTimeMillis();
 
-                // Exibir o resultado para cada sentença
-                System.out
-                        .println("A frase ( " + linha + " ) " + (resultado ? "é da linguagem" : "não é da linguagem"));
+                // Escrever o resultado para o arquivo especificado
+                writer.println("Sentença: " + linha.length() + " - Resultado: " + (resultado ? "Aceita" : "Rejeitada") +
+                        " - Tempo de execução: " + (tempoFim - tempoDeCadaTeste) + " milissegundos");
             }
+
+            long tempoTotal = System.currentTimeMillis();
+
+            writer.print("\nTempo total de todos os testes: " + (tempoTotal - tempoDeInicio) + " milissegundos");
+
+            System.out.println("Resultados foram gravados no arquivo: " + resultadosArquivo);
         } catch (IOException e) {
             e.printStackTrace();
         }

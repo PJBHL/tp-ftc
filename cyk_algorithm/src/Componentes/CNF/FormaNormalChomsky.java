@@ -22,29 +22,29 @@ public class FormaNormalChomsky {
   public FormaNormalChomsky(Gramatica gramatica) {
     this.glc = gramatica.getGramaticaLida();
 
-    System.out.println("\nGramatica Lida: \n");
+    // System.out.println("\nGramatica Lida: \n");
     Map<String, List<String>> copiaMap = Gramatica.clonarGramatica(this.glc);
-    Gramatica.imprimirGramatica(copiaMap);
+    // Gramatica.imprimirGramatica(copiaMap);
 
-    System.out.println("\nGramatica tirando Lambda: \n");
+    // System.out.println("\nGramatica tirando Lambda: \n");
     copiaMap = RemoverTransicoesVazias.eliminarProducoesVazias(copiaMap);
-    Gramatica.imprimirGramatica(copiaMap);
+    // Gramatica.imprimirGramatica(copiaMap);
 
-    System.out.println("\nGramatica tirando Unitários: \n");
+    // System.out.println("\nGramatica tirando Unitários: \n");
     copiaMap = RemoverTransicoesInuteis.removerUnitarios(copiaMap);
-    Gramatica.imprimirGramatica(copiaMap);
+    // Gramatica.imprimirGramatica(copiaMap);
 
-    System.out.println("\nGramatica tirando regras Inúteis: \n");
+    // System.out.println("\nGramatica tirando regras Inúteis: \n");
     copiaMap = RemoverTransicoesInuteis.removerInuteis(copiaMap);
-    Gramatica.imprimirGramatica(copiaMap);
+    // Gramatica.imprimirGramatica(copiaMap);
 
-    System.out.println("\nGramatica convertendo terminais: \n");
+    // System.out.println("\nGramatica convertendo terminais: \n");
     copiaMap = ConverterTerminais.converterTerminais(copiaMap);
-    Gramatica.imprimirGramatica(copiaMap);
+    // Gramatica.imprimirGramatica(copiaMap);
 
-    System.out.println("\nGramatica em CNF: \n");
+    // System.out.println("\nGramatica em CNF: \n");
     copiaMap = ConverterNaoTerminais.converterNaoTerminais(copiaMap);
-    Gramatica.imprimirGramatica(copiaMap);
+    // Gramatica.imprimirGramatica(copiaMap);
 
     this.glc = copiaMap;
   }

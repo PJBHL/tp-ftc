@@ -1,0 +1,16 @@
+Tempo de conversão para a Forma Normal de Chomsky ou 2NF: 26 milissegundos
+
+Sentença: 46 - Resultado: Aceita - Tempo de execução: 281 milissegundos
+Sentença: 2 - Resultado: Aceita - Tempo de execução: 4 milissegundos
+Sentença: 18 - Resultado: Aceita - Tempo de execução: 44 milissegundos
+Sentença: 1 - Resultado: Aceita - Tempo de execução: 24 milissegundos
+Sentença: 16 - Resultado: Aceita - Tempo de execução: 5 milissegundos
+Sentença: 2 - Resultado: Rejeitada - Tempo de execução: 1 milissegundos
+Sentença: 2 - Resultado: Rejeitada - Tempo de execução: 3 milissegundos
+Sentença: 34 - Resultado: Aceita - Tempo de execução: 100 milissegundos
+Sentença: 5 - Resultado: Rejeitada - Tempo de execução: 12 milissegundos
+Sentença: 15 - Resultado: Aceita - Tempo de execução: 6 milissegundos
+Sentença: 9 - Resultado: Aceita - Tempo de execução: 3 milissegundos
+Sentença: 39 - Resultado: Rejeitada - Tempo de execução: 16 milissegundos
+
+Tempo total de todos os testes: 617 milissegundos
