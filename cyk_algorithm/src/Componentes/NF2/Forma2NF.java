@@ -15,20 +15,20 @@ public class Forma2NF {
     public Forma2NF(Gramatica gramatica) {
         glc = gramatica.getGramaticaLida();
 
-        System.out.println("\nGramatica Lida: \n");
-        Gramatica.imprimirGramatica(glc);
+        // System.out.println("\nGramatica Lida: \n");
+        // Gramatica.imprimirGramatica(glc);
 
         // Removendo possíveis inuteis da gramática.
-        System.out.println("\nGramatica tirando os inuteis: \n");
+        // System.out.println("\nGramatica tirando os inuteis: \n");
         glc = RemoverTransicoesInuteis.removerInuteis(glc);
-        Gramatica.imprimirGramatica(glc);
+        // Gramatica.imprimirGramatica(glc);
 
-        System.out.println("\nGramatica em 2NF: \n");
+        // System.out.println("\nGramatica em 2NF: \n");
         glc = ConverterNaoTerminais.converterNaoTerminais(glc);
-        Gramatica.imprimirGramatica(glc);
+        // Gramatica.imprimirGramatica(glc);
     }
 
-    public static Map<String, List<String>> getGlc() {
+    public Map<String, List<String>> getGlc() {
         return glc;
     }
 }

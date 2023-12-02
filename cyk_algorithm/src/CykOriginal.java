@@ -140,6 +140,6 @@ public class CykOriginal {
     long tempoInicio = System.currentTimeMillis();
     FormaNormalChomsky chomsky = new FormaNormalChomsky(glc);
     long tempoConversao = System.currentTimeMillis();
-    Tester.testarSentencas("C:\\Users\\joaopc\\Documents\\tp-ftc\\cyk_algorithm\\src/frases.txt", chomsky.getGlc(), null, "resultados-original.txt", false, tempoInicio, tempoConversao);   
+    Tester.testarSentencas(args[1], chomsky.getGlc(), null, "resultados-original.txt", false, tempoInicio, tempoConversao);   
   }
 }

@@ -143,6 +143,17 @@ public class CykModificado {
         return invertedMap;
     }
 
+    public static Map<String, List<String>> getGramaticaInversa(Map<String, List<String>> glc) {
+        Map<String, List<String>> glcCopy = Gramatica.clonarGramatica(glc);
+        List<String> transicoesVaizas = nullable(glcCopy);
+
+        glc = pegarUnitarios(glc, transicoesVaizas);
+        glc = glcTransitividade(glc);
+        glc = inversoTransitiva(glc);
+
+        return glc;
+    }
+
     /**
      * Método cyk modificidado proposto no artigo, aqui são usadas duas tabelas para
      * comparação e duas gramáticas.
@@ -221,6 +232,11 @@ public class CykModificado {
 
     public static void main(String[] args) throws Exception {
         Gramatica glc = new Gramatica(args[0]);
+        long tempoInicio = System.currentTimeMillis();
         Forma2NF nf = new Forma2NF(glc);
+        Map<String, List<String>> glcCopy = Gramatica.clonarGramatica(nf.getGlc());
+        Map<String, List<String>> glcInversa = getGramaticaInversa(glcCopy);
+        long tempoConversao = System.currentTimeMillis();
+        Tester.testarSentencas(args[1], nf.getGlc(), glcInversa, "resultados-modificado.txt", true, tempoInicio, tempoConversao);   
     }
 }
