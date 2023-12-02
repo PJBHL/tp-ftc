@@ -1,7 +1,7 @@
 # Trabalho Prático - Fundamentos Teóricos da Computação
 
 **Professor**: Zenilton Kleber Gonçalves do Patrocínio Júnior  
-**Entrega**: 26/11/2023  
+**Entrega**: 03/12/2023  
 
 ## Objetivo
 
@@ -21,3 +21,8 @@ as duas estratégias aplicadas a gramáticas de diferentes tamanhos.
 
 **Feito por**: [João Pedro Lobato](https://github.com/PJBHL)  
 **Feito por**: [Vinícius Henrique Giovanini](https://github.com/viniciushgiovanini)  
+
+## Execução
+
+Para executar os algoritmos utilize a compilação padrão do Java. Os diretórios podem ser excluídos e todos os arquivos podem estar no mesmo diretório.
+Os argumentos devem ser a gramática e um arquivo contendo as frases.
